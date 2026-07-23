@@ -24,7 +24,11 @@ class VerificationCommandTest(unittest.TestCase):
         self.assertIn("Configured commands:", output)
         self.assertIn("- python-unit-tests", output)
         self.assertIn(
-            "  Command: PYTHONPATH=src python3 -m unittest discover -s tests",
+            "  Command: PYTHONPATH=src:tests python3 -m unittest "
+            "$(find tests -maxdepth 1 -name \"test_*.py\" "
+            "! -name \"test_wheel_packaging_smoke.py\" "
+            "! -name \"test_sdist_packaging_smoke.py\" "
+            "-exec basename {} .py \\; | sort)",
             output,
         )
         self.assertIn("  Required: yes", output)
@@ -38,6 +42,12 @@ class VerificationCommandTest(unittest.TestCase):
         self.assertIn(
             "  Command: python3 scripts/check_editable_install.py --upgrade-pip "
             "--skip-full-verification-run",
+            output,
+        )
+        self.assertIn("- source-distribution-packaging-smoke", output)
+        self.assertIn(
+            "  Command: PYTHONPATH=src python3 -m unittest "
+            "tests.test_sdist_packaging_smoke",
             output,
         )
         self.assertIn(

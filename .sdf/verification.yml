@@ -23,6 +23,9 @@ commands:
   - name: wheel-packaging-smoke
     command: PYTHONPATH=src python3 -m unittest tests.test_wheel_packaging_smoke
     track_timing: true
+  - name: source-distribution-packaging-smoke
+    command: PYTHONPATH=src python3 -m unittest tests.test_sdist_packaging_smoke
+    track_timing: true
   - name: python-unit-tests
-    command: PYTHONPATH=src python3 -m unittest discover -s tests
+    command: 'PYTHONPATH=src:tests python3 -m unittest $(find tests -maxdepth 1 -name "test_*.py" ! -name "test_wheel_packaging_smoke.py" ! -name "test_sdist_packaging_smoke.py" -exec basename {} .py \; | sort)'
     track_timing: true

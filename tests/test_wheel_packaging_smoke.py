@@ -13,23 +13,8 @@ from sdf_cli import __version__
 from sdf_cli.receiver_scaffold_content import PORTABLE_SOURCE_FILES
 
 
-class WheelPackagingSmokeTest(unittest.TestCase):
-    """Prove clean wheels contain everything ``sdf init`` reads at runtime."""
-
-    def test_clean_wheels_install_and_initialize_a_receiver(self):
-        with tempfile.TemporaryDirectory() as directory:
-            workspace = Path(directory)
-            source_export = workspace / "source-export"
-            self._export_clean_source(source_export)
-            wheels = workspace / "wheels"
-            wheels.mkdir()
-
-            pep517_wheel = self._build_pep517_wheel(source_export, wheels)
-
-            for wheel in (pep517_wheel,):
-                with self.subTest(wheel=wheel.name):
-                    self._assert_wheel_resources(wheel)
-                    self._assert_installed_wheel_initializes_receiver(wheel, workspace)
+class PackagingSmokeTestCase(unittest.TestCase):
+    """Shared clean-export and installed-package helpers for packaging smokes."""
 
     def _export_clean_source(self, destination: Path) -> None:
         shutil.copytree(
@@ -130,3 +115,22 @@ class WheelPackagingSmokeTest(unittest.TestCase):
     def _venv_executable(self, environment: Path, name: str) -> Path:
         folder = "Scripts" if os.name == "nt" else "bin"
         return environment / folder / name
+
+
+class WheelPackagingSmokeTest(PackagingSmokeTestCase):
+    """Prove clean wheels contain everything ``sdf init`` reads at runtime."""
+
+    def test_clean_wheels_install_and_initialize_a_receiver(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            source_export = workspace / "source-export"
+            self._export_clean_source(source_export)
+            wheels = workspace / "wheels"
+            wheels.mkdir()
+
+            pep517_wheel = self._build_pep517_wheel(source_export, wheels)
+
+            for wheel in (pep517_wheel,):
+                with self.subTest(wheel=wheel.name):
+                    self._assert_wheel_resources(wheel)
+                    self._assert_installed_wheel_initializes_receiver(wheel, workspace)
