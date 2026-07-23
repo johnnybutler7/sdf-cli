@@ -1,1 +1,15 @@
+include README.md
+include GETTING-STARTED.md
+include LICENSE
+include NOTICE
+include pyproject.toml
 recursive-include src/sdf_cli/resources/portable_sdf *.md
+prune tests
+prune scripts
+prune .sdf/evidence
+prune .sdf/handoffs
+prune .github
+prune .codex
+prune build
+prune dist
+global-exclude __pycache__ *.py[cod] *.egg-info .DS_Store

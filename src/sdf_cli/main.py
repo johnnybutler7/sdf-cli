@@ -80,10 +80,13 @@ class SdfHelpFormatter(argparse.HelpFormatter):
             return None
 
         lines: list[str] = []
+        command_width = min(28, max(18, max(len(name) for name in choices) + 2))
         for title, names in _COMMAND_HELP_GROUPS:
             lines.append(f"{' ' * self._current_indent}{title}:")
             for name in names:
-                lines.extend(self._format_command_help(name, choices[name]))
+                lines.extend(
+                    self._format_command_help(name, choices[name], command_width)
+                )
             lines.append("")
         return "\n".join(lines)
 
@@ -91,8 +94,8 @@ class SdfHelpFormatter(argparse.HelpFormatter):
         self,
         name: str,
         choice: argparse.Action,
+        command_width: int,
     ) -> list[str]:
-        command_width = 18
         command_indent = " " * (self._current_indent + 2)
         help_indent = " " * (self._current_indent + 2 + command_width)
         help_text = choice.help or ""

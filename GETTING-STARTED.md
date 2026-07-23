@@ -26,6 +26,10 @@ That package is not published to PyPI yet. From a local source checkout, run:
 pipx install --editable .
 ```
 
+The PyPI distribution is **`software-dark-factory`**. Do not infer a PyPI
+package name from this repository or the `sdf` executable: `sdf-cli` and `sdf`
+are not this project's distribution names.
+
 With a virtual environment, use the intended post-release installation route:
 
 ```shell
@@ -65,11 +69,13 @@ sdf status
 sdf guidance
 ```
 
-`sdf init` creates the portable `.sdf` guidance and contracts, a
-`.sdf/config.yml`, and a starter `.sdf/verification.yml`. It may also add an
-`AGENTS.md` or `CLAUDE.md` entry point. These are the installed Front Door, not
-your team's standards. Your repository owns its configuration, additional
-playbooks, verification commands, and every evidence archive.
+`sdf init` may create `.sdf/` (including portable guidance, contracts,
+`config.yml`, and starter `verification.yml`) plus root `AGENTS.md` and
+`CLAUDE.md` entries. It does not silently replace existing files; when managed
+`.gitignore` or `.gitattributes` entries are missing, it may append them. These
+are the installed Front Door, not your team's standards. Your repository owns
+its configuration, additional playbooks, verification commands, and every
+evidence archive.
 
 The starter verification file intentionally fails until you replace it with
 checks your repository trusts. For this example, create a tiny test and use
@@ -102,6 +108,12 @@ sdf verify
 
 `--check` is read-only. `sdf verify` runs only the commands the receiver has
 configured; it does not create evidence, approve a change, or contact GitHub.
+
+## Current support boundary
+
+This Developer Preview is tested on Linux and macOS-style POSIX environments;
+Windows is not currently tested or claimed. Hosted CI covers Python 3.11–3.14,
+plus wheel and source-distribution packaging smokes on Python 3.11.
 
 ## Start and close a small governed change
 

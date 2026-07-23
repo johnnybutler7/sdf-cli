@@ -47,7 +47,11 @@ def read_machine_record(data: bytes, *, change_id: str) -> EvidenceMachineRecord
             data, MACHINE_RECORD_HEADING
         )
     except ValueError as error:
-        raise EvidenceMachineRecordError(_unsupported_message()) from error
+        if str(error) == "evidence.md machine-record heading is missing":
+            raise EvidenceMachineRecordError(_unsupported_message()) from error
+        raise EvidenceMachineRecordError(
+            f"invalid machine record: {error}"
+        ) from error
     contract_version = contract_version_from(metadata)
     if contract_version is None:
         raise EvidenceMachineRecordError(_unsupported_message())
@@ -59,7 +63,11 @@ def read_machine_record(data: bytes, *, change_id: str) -> EvidenceMachineRecord
         or values["change_id"] != change_id
         or not valid_machine_values(values)
     ):
-        raise EvidenceMachineRecordError(_unsupported_message())
+        raise EvidenceMachineRecordError(
+            _invalid_record_message(
+                contract_version, "required values are missing or invalid"
+            )
+        )
     record = EvidenceMachineRecord(
         contract_version=contract_version,
         change_id=change_id,
@@ -81,7 +89,12 @@ def read_machine_record(data: bytes, *, change_id: str) -> EvidenceMachineRecord
         yaml_end=yaml_end,
     )
     if metadata != render_machine_record(record):
-        raise EvidenceMachineRecordError(_unsupported_message())
+        raise EvidenceMachineRecordError(
+            _invalid_record_message(
+                contract_version,
+                "contains unsupported fields or non-canonical content",
+            )
+        )
     return record
 
 
@@ -162,3 +175,9 @@ def _unsupported_message() -> str:
         "historical or unsupported evidence machine record "
         "(contract 4 or 5 required)"
     )
+
+
+def _invalid_record_message(contract_version: int, reason: str) -> str:
+    if contract_version == 4:
+        return _unsupported_message()
+    return f"invalid contract 5 machine record: {reason}"

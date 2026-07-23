@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from sdf_cli.config.verification import FocusedVerificationSubset, VerificationCommand
+from sdf_cli.config.verification_scalar import parse_scalar
 
 
 def parse_focused_subsets(
@@ -62,7 +63,7 @@ def _parse_focused_items(
             command_names = current.setdefault("commands", [])
             if not isinstance(command_names, list):
                 return items, "verification focused commands must be a list"
-            command_names.append(_unquote(stripped[1:].strip()))
+            command_names.append(parse_scalar(stripped[1:]))
             continue
         key, separator, value = stripped.partition(":")
         if not separator:
@@ -71,7 +72,7 @@ def _parse_focused_items(
             current["commands"] = []
             collecting_commands = True
             continue
-        current[key.strip()] = _unquote(value.strip())
+        current[key.strip()] = parse_scalar(value)
         collecting_commands = False
     _finish_focused_item(items, current)
     return items, None
@@ -89,7 +90,7 @@ def _start_focused_item(
     key, separator, value = remainder.partition(":")
     if not separator:
         return item, f"invalid focused verification field: {remainder}"
-    item[key.strip()] = _unquote(value.strip())
+    item[key.strip()] = parse_scalar(value)
     return item, None
 
 
@@ -134,7 +135,7 @@ def _top_level_value(lines: list[str], key: str) -> str | None:
         if stripped == prefix:
             return ""
         if stripped.startswith(f"{prefix} "):
-            return _unquote(stripped.removeprefix(prefix).strip())
+            return parse_scalar(stripped.removeprefix(prefix))
     return None
 
 
@@ -159,9 +160,3 @@ def _starts_nested_list_item(raw_line: str, *, indent: int) -> bool:
 
 def _leading_spaces(raw_line: str) -> int:
     return len(raw_line) - len(raw_line.lstrip(" "))
-
-
-def _unquote(value: str) -> str:
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
-        return value[1:-1]
-    return value

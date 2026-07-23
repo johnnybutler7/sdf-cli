@@ -103,6 +103,18 @@ commands:
             "verification command unit track_timing must be true or false",
         )
 
+    def test_malformed_scalar_with_trailing_comment_still_fails(self):
+        self.assert_invalid(
+            """
+version: 1  # valid inline comment
+commands:
+  - name: unit
+    command: python3 -m unittest
+    required: sometimes  # still invalid
+""",
+            "verification command unit required must be true or false",
+        )
+
     def assert_invalid(self, content: str, error: str):
         config = load_config(content)
         self.assertFalse(config.valid)

@@ -19,6 +19,12 @@ The file uses `version: 1` and a `commands` list. Each entry has a stable
 `name` and exact `command`; `required` defaults to `true`, while `false` marks
 nonblocking feedback. `track_timing: true` records review context only.
 
+SDF intentionally supports a small YAML-like subset rather than a full YAML
+runtime dependency. Plain scalar fields accept an ordinary trailing comment
+when `#` starts that comment (for example, `version: 1  # config version`).
+Command values remain literal so shell commands containing `#` are preserved,
+and `#` inside quoted values is preserved.
+
 Results state what was checked in that environment. Required failures block a
 passing configured run; optional failures remain reviewer-visible. Neither
 result nor timing is a broader correctness claim.
