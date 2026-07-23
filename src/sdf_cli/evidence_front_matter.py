@@ -1,4 +1,4 @@
-"""Safe read and update support for contract-4 evidence machine records."""
+"""Safe read and update support for evidence machine records."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from sdf_cli import __version__
-from sdf_cli.evidence_contract_four import (
+from sdf_cli.evidence_contract import (
     DECLARED_FIELDS,
     EVIDENCE_ARCHIVE_CONTRACT,
     MACHINE_RECORD_HEADING,

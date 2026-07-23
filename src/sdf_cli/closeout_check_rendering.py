@@ -11,7 +11,7 @@ from sdf_cli.evidence_archive_check import (
 )
 from sdf_cli.evidence_archive_contract import (
     CONTRACT_FIVE_JUDGEMENT_HEADINGS,
-    verification_filename,
+    CURRENT_NARRATIVE_FILENAME,
 )
 from sdf_cli.verification_formatting import format_duration
 from sdf_cli.verification_results import VerificationRunResult
@@ -93,9 +93,8 @@ def _summary_next_step_lines(result: CloseoutCheckResult) -> list[str]:
         f"sdf close --repo {result.repo_label} "
         f"--change-id {result.evidence_result.change_id}"
     )
-    archive_dir = result.repo_path / result.evidence_result.archive_path
     verification_path = f"{result.evidence_result.archive_path}/"
-    verification_path += verification_filename(archive_dir)
+    verification_path += CURRENT_NARRATIVE_FILENAME
     if result.exit_code == 0:
         return [
             "",

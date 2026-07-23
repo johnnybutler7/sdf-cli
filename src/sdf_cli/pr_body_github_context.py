@@ -29,13 +29,12 @@ def resolve_pr_body_link_options(
     link_mode: str | None,
     github_repo: str | None,
     github_ref: str | None,
-    change_id: str | None = None,
     allow_branch_fallback: bool = False,
 ) -> PrBodyLinkOptions:
     """Resolve PR-body link options without requiring network access."""
 
     inferred_repo = github_repo or infer_github_repo(repo)
-    inferred_ref = github_ref or infer_current_pr_ref(repo, change_id)
+    inferred_ref = github_ref or infer_current_pr_ref(repo)
     if inferred_ref is None and allow_branch_fallback:
         inferred_ref = infer_current_branch(repo)
 
@@ -71,23 +70,6 @@ def resolve_pr_body_link_options(
     )
 
 
-def resolve_handoff_pr_body_link_options(
-    *,
-    repo: str,
-    link_mode: str | None,
-    github_repo: str | None,
-    github_ref: str | None,
-    change_id: str | None = None,
-) -> PrBodyLinkOptions:
-    return resolve_pr_body_link_options(
-        repo=repo,
-        link_mode=link_mode,
-        github_repo=github_repo,
-        github_ref=github_ref,
-        change_id=change_id,
-    )
-
-
 def infer_github_repo(repo: str) -> str | None:
     remote_url = _git_output(repo, "remote", "get-url", "origin")
     if remote_url is None:
@@ -99,9 +81,8 @@ def infer_current_branch(repo: str) -> str | None:
     return _git_output(repo, "branch", "--show-current")
 
 
-def infer_current_pr_ref(repo: str, change_id: str | None = None) -> str | None:
+def infer_current_pr_ref(repo: str) -> str | None:
     """Return the immutable local PR-head candidate when it is available."""
-    del change_id
     head_sha = _git_output(repo, "rev-parse", "HEAD")
     if head_sha and is_full_commit_sha(head_sha):
         return head_sha

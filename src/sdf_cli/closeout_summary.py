@@ -13,12 +13,12 @@ from sdf_cli.closeout_summary_sections import (
     what_reviewing_lines,
 )
 from sdf_cli.closeout_verification_section import verification_lines
-from sdf_cli.evidence_archive_contract import narrative_filename
+from sdf_cli.evidence_archive_contract import CURRENT_NARRATIVE_FILENAME
 
 
 def render_closeout_summary_markdown(result: CloseoutCheckResult) -> str:
     archive_path = result.evidence_result.archive_path
-    narrative = narrative_filename(result.repo_path / archive_path)
+    narrative = CURRENT_NARRATIVE_FILENAME
     narrative_label = (
         "Review evidence" if narrative == "evidence.md" else "Review notes"
     )

@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 from sdf_cli.evidence_archive_check import EvidenceArchiveCheckResult
-from sdf_cli.evidence_contract_four import EvidenceMachineRecord
+from sdf_cli.evidence_contract import EvidenceMachineRecord
 from sdf_cli.open_pr_github import ObservedPullRequest
 from sdf_cli.pr_body_check import check_pr_body_content
 from sdf_cli.pr_body_links import LINK_MODE_GITHUB

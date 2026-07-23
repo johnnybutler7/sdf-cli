@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from sdf_cli.evidence_contract_four_validation import valid_machine_values
+from sdf_cli.evidence_contract_validation import valid_machine_values
 from sdf_cli.evidence_machine_record_parse import (
     contract_version_from,
     parse_machine_record,

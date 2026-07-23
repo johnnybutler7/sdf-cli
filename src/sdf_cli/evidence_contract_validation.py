@@ -1,4 +1,4 @@
-"""Validation rules for the compact contract-4 machine record."""
+"""Validation rules for supported evidence machine records."""
 
 from __future__ import annotations
 

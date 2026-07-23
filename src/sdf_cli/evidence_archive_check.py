@@ -14,7 +14,7 @@ from sdf_cli.evidence_archive_check_rendering import (
 )
 from sdf_cli.evidence_archive_contract import (
     REQUIRED_ARCHIVE_HEADINGS,
-    archive_required_files,
+    ROUTINE_EVIDENCE_FILES,
 )
 from sdf_cli.evidence_archive_placeholders import (
     EvidenceArchivePlaceholder,
@@ -107,7 +107,6 @@ def check_evidence_archive(repo: str, change_id: str) -> EvidenceArchiveCheckRes
             files=(),
         )
 
-    required_files, _ = archive_required_files(archive_dir)
     return EvidenceArchiveCheckResult(
         change_id=change_id,
         repo_path=repo_path,
@@ -118,7 +117,7 @@ def check_evidence_archive(repo: str, change_id: str) -> EvidenceArchiveCheckRes
                 filename,
                 embedded_verification=True,
             )
-            for filename in required_files
+            for filename in ROUTINE_EVIDENCE_FILES
         ),
     )
 
