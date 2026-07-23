@@ -10,6 +10,25 @@ review evidence executable before human review.
 Your team defines what acceptable delivery means. SDF makes those standards,
 checks, and evidence executable before human review.
 
+## Engineering overview
+
+SDF keeps repository policy with the repository and makes the execution,
+evidence, and review boundaries inspectable. See [ARCHITECTURE.md](ARCHITECTURE.md)
+for the system model, lifecycle, trust boundaries, and Developer Preview limits.
+
+- A zero-runtime-dependency Python CLI, tested on Python 3.11–3.14.
+- Non-destructive, manifest-driven [receiver installation](src/sdf_cli/receiver_payload_manifest.py).
+- A canonical [evidence record](src/sdf_cli/evidence_contract.py) with atomic
+  updates and human-narrative preservation.
+- [GitHub publication workflows](.github/workflows/publish-open-pr-body.yml)
+  that avoid PR-head execution and guard PR-body mutation; see the
+  [hostile-input regression test](tests/test_publish_open_pr_body_workflow.py).
+- A [release pipeline](.github/workflows/release.yml) that functionally verifies
+  the exact wheel and source distribution before Trusted Publishing.
+
+Representative implementation: [verification command execution](src/sdf_cli/verification_command_execution.py),
+[a finalized evidence handoff](https://github.com/johnnybutler7/sdf-cli/pull/4).
+
 ## The problem
 
 Teams increasingly use AI assistance, but a useful change still needs to meet
