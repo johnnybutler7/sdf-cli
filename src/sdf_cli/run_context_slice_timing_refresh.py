@@ -1,4 +1,4 @@
-"""Close the contract-4 lifecycle after successful closeout."""
+"""Close the evidence lifecycle after successful closeout."""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ def close_run_context_slice_timing(
         record = load_evidence_machine_record(path, change_id=change_id)
         if record is None or not record.started_at:
             return RunContextSliceTimingCloseResult(
-                path, False, "supported contract-4 machine record is missing"
+                path, False, "supported evidence machine record is missing"
             )
         now = (clock or (lambda: datetime.now(timezone.utc)))()
         close_evidence_machine_record(
@@ -39,6 +39,6 @@ def close_run_context_slice_timing(
         )
     except (OSError, EvidenceFrontMatterError):
         return RunContextSliceTimingCloseResult(
-            path, False, "contract-4 lifecycle close failed"
+            path, False, "evidence lifecycle close failed"
         )
     return RunContextSliceTimingCloseResult(path, True)

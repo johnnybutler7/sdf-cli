@@ -1,4 +1,4 @@
-"""Read declared context from supported contract-4 evidence records."""
+"""Read declared context from supported evidence machine records."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Write compact contract-4 closeout facts into the active archive."""
+"""Write compact closeout facts into the active evidence archive."""
 
 from __future__ import annotations
 
@@ -21,18 +21,6 @@ from sdf_cli.evidence_verification_summary import refresh_evidence_verification_
 
 def closeout_result_record_path(change_id: str) -> str:
     return f".sdf/evidence/{change_id}/evidence.md"
-
-
-def write_closeout_result_record(
-    *,
-    repo: str,
-    result: CloseoutCheckResult,
-    clock: Callable[[], datetime] | None = None,
-) -> bool:
-    return (
-        write_verification_result_record(repo=repo, result=result)
-        and write_closeout_status_record(repo=repo, result=result, clock=clock)
-    )
 
 
 def write_verification_result_record(

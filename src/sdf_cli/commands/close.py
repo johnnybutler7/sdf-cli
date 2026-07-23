@@ -126,7 +126,6 @@ def handle_close(args: argparse.Namespace, parser: argparse.ArgumentParser) -> i
         link_mode=args.link_mode,
         github_repo=args.github_repo,
         github_ref=args.github_ref,
-        change_id=args.change_id,
     )
     args.link_mode = link_options.link_mode
     args.github_repo = link_options.github_repo

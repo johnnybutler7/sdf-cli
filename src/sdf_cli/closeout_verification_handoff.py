@@ -1,4 +1,4 @@
-"""Read compact contract-4 verification facts for reviewer handoff text."""
+"""Read compact evidence verification facts for reviewer handoff text."""
 
 from __future__ import annotations
 

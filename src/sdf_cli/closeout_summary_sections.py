@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from sdf_cli.evidence_archive_contract import narrative_filename
+from sdf_cli.evidence_archive_contract import CURRENT_NARRATIVE_FILENAME
 
 APPLIED_PLAYBOOK_LINE_LIMIT = 5
 CONSULTED_PLAYBOOK_FALLBACK_LIMIT = 3
@@ -21,7 +21,7 @@ PLAYBOOK_TEMPLATE_PREFIXES = (
     "Record playbooks considered but not materially shaping this slice.",
 )
 def what_reviewing_lines(result: Any) -> list[str]:
-    filename = _narrative_filename(result)
+    filename = CURRENT_NARRATIVE_FILENAME
     lines = archive_section_lines(result, filename, "## Change Summary")
     if not lines:
         lines = archive_section_lines(result, filename, "## Intent")
@@ -33,7 +33,7 @@ def what_reviewing_lines(result: Any) -> list[str]:
         f"- Change summary was not extracted from `{filename}`.",
     ]
 def review_focus_lines(result: Any) -> list[str]:
-    filename = _narrative_filename(result)
+    filename = CURRENT_NARRATIVE_FILENAME
     focus_lines = archive_section_lines(
         result,
         filename,
@@ -147,7 +147,7 @@ def archive_section_lines(result: Any, filename: str, heading: str) -> list[str]
 
 
 def archive_boundary_lines(result: Any) -> list[str]:
-    narrative = archive_file_text(result, _narrative_filename(result))
+    narrative = archive_file_text(result, CURRENT_NARRATIVE_FILENAME)
     if narrative is None:
         return []
 
@@ -158,13 +158,10 @@ def archive_boundary_lines(result: Any) -> list[str]:
 
 
 def archive_file_text(result: Any, filename: str) -> str | None:
-    path = Path(result.repo_path) / result.evidence_result.archive_path / filename
+    path = result.repo_path / result.evidence_result.archive_path / filename
     if not path.is_file():
         return None
     return path.read_text(encoding="utf-8")
-def _narrative_filename(result: Any) -> str:
-    archive_dir = Path(result.repo_path) / result.evidence_result.archive_path
-    return narrative_filename(archive_dir)
 def markdown_section(markdown: str, heading: str) -> str:
     lines = markdown.splitlines()
     section_lines: list[str] = []

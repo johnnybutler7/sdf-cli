@@ -8,6 +8,7 @@ from tests.evidence_archive_helpers import populated_template_for
 
 from sdf_cli.closeout_handoff import run_closeout_handoff
 from sdf_cli.evidence_archive_check import check_evidence_archive
+from sdf_cli.evidence_contract import EvidenceMachineRecord
 from sdf_cli.evidence_front_matter import (
     EvidenceFrontMatterError,
     initialize_evidence_machine_record,
@@ -63,7 +64,23 @@ class EvidenceMachineRecordTest(unittest.TestCase):
         self.assertIn("contract: 5", content)
         self.assertIn("repository:", content)
         self.assertIn("branch:", content)
+        self.assertIsInstance(record, EvidenceMachineRecord)
         self.assertEqual(record.declared["model"], "gpt-5.5")
+
+    def test_contract_five_machine_record_rerenders_byte_for_byte(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.md"
+            path.write_text("# Evidence\n\nHuman text\n")
+            initialize_evidence_machine_record(
+                path, change_id="slice", started_at="2026-01-01T00:00:00+00:00"
+            )
+            record = load_evidence_machine_record(path, change_id="slice")
+            original = path.read_bytes()
+            assert record is not None
+
+            update_evidence_machine_record(path, change_id="slice", record=record)
+
+            self.assertEqual(path.read_bytes(), original)
 
     def test_historical_record_is_one_clear_unsupported_status(self):
         with tempfile.TemporaryDirectory() as directory:

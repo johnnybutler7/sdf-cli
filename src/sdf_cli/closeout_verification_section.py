@@ -12,7 +12,7 @@ from sdf_cli.closeout_summary_sections import (
 )
 from sdf_cli.closeout_verification_handoff import verification_history_line
 from sdf_cli.evidence_archive_contract import (
-    verification_filename,
+    CURRENT_NARRATIVE_FILENAME,
     verification_section_heading,
 )
 from sdf_cli.evidence_verification_summary import compact_check_summary
@@ -22,7 +22,7 @@ from sdf_cli.verification_results import VerificationRunResult
 
 def verification_lines(result: Any) -> list[str]:
     archive_path = result.evidence_result.archive_path
-    filename = verification_filename(result.repo_path / archive_path)
+    filename = CURRENT_NARRATIVE_FILENAME
     lines = [
         "- Full verification: "
         f"{compact_verification_status(result.verification_result)}",
@@ -108,9 +108,7 @@ def _recorded_from_structured_closeout(result: VerificationRunResult) -> bool:
 
 
 def compact_verification_handoff_lines(result: Any) -> list[str]:
-    filename = verification_filename(
-        result.repo_path / result.evidence_result.archive_path
-    )
+    filename = CURRENT_NARRATIVE_FILENAME
     blocker_lines = archive_section_lines(
         result,
         filename,

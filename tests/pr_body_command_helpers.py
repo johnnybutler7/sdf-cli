@@ -73,7 +73,6 @@ def _link_options(
         link_mode=link_mode,
         github_repo=github_repo,
         github_ref=github_ref,
-        change_id=change_id,
     )
     errors = validate_pr_body_link_options(
         link_mode=options.link_mode,

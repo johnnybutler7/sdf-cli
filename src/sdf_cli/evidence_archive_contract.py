@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 EVIDENCE_ARCHIVE_CONTRACT_VERSION = 5
 CURRENT_NARRATIVE_FILENAME = "evidence.md"
 
@@ -66,20 +64,6 @@ CONTRACT_FOUR_REQUIRED_ARCHIVE_HEADINGS: dict[str, tuple[str, ...]] = {
         *VERIFICATION_HEADINGS,
     ),
 }
-
-def narrative_filename(archive_dir: Path) -> str:
-    """Return the only supported archive narrative artifact."""
-    return CURRENT_NARRATIVE_FILENAME
-
-
-def archive_required_files(archive_dir: Path) -> tuple[tuple[str, ...], bool]:
-    return ROUTINE_EVIDENCE_FILES, False
-
-
-def verification_filename(archive_dir: Path) -> str:
-    """Return the only supported reviewer-facing verification artifact."""
-    return CURRENT_NARRATIVE_FILENAME
-
 
 def verification_section_heading(filename: str, section: str) -> str:
     """Return the versioned Markdown heading for a verification subsection."""
