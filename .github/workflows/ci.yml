@@ -52,11 +52,12 @@ jobs:
       - name: Check source repository guidance
         run: PYTHONPATH=src python3 -m sdf_cli.main guidance --repo .
 
-      - name: Run unit tests except wheel packaging smoke
+      - name: Run unit tests except dedicated packaging smokes
         run: |
           PYTHONPATH=src:tests python3 -m unittest \
             $(find tests -maxdepth 1 -name 'test_*.py' \
               ! -name 'test_wheel_packaging_smoke.py' \
+              ! -name 'test_sdist_packaging_smoke.py' \
               -exec basename {} .py \; | sort)
 
   wheel-packaging-smoke:
@@ -77,3 +78,22 @@ jobs:
 
       - name: Run wheel packaging smoke
         run: PYTHONPATH=src python3 -m unittest tests.test_wheel_packaging_smoke
+
+  sdist-packaging-smoke:
+    name: Source distribution smoke (Python 3.11)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test dependencies
+        run: python3 -m pip install -e ".[test]"
+
+      - name: Run source-distribution smoke
+        run: PYTHONPATH=src python3 -m unittest tests.test_sdist_packaging_smoke

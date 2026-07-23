@@ -26,6 +26,7 @@ Issues = "https://github.com/johnnybutler7/sdf-cli/issues"
 
 [project.optional-dependencies]
 test = [
+  "build>=1.2",
   "PyYAML>=6.0",
   "ruff>=0.5",
   "setuptools>=70.1",
