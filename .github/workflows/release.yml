@@ -1,0 +1,136 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-verify:
+    name: Build and verify distributions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tooling
+        run: python3 -m pip install --upgrade build
+
+      - name: Confirm release tag matches package version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          package_version="$(python3 - <<'PY'
+          import tomllib
+          from pathlib import Path
+
+          with Path("pyproject.toml").open("rb") as package_file:
+              print(tomllib.load(package_file)["project"]["version"])
+          PY
+          )"
+          expected_tag="v${package_version}"
+          if [ "${RELEASE_TAG}" != "${expected_tag}" ]; then
+            echo "Release tag must exactly match ${expected_tag}; got ${RELEASE_TAG}." >&2
+            exit 1
+          fi
+
+      - name: Build distributions
+        run: python3 -m build
+
+      - name: Confirm expected distributions were built
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import sys
+          import tomllib
+          from pathlib import Path
+
+          with Path("pyproject.toml").open("rb") as package_file:
+              version = tomllib.load(package_file)["project"]["version"]
+
+          expected = {
+              Path("dist") / f"software_dark_factory-{version}-py3-none-any.whl",
+              Path("dist") / f"software_dark_factory-{version}.tar.gz",
+          }
+          actual = set(Path("dist").iterdir()) if Path("dist").is_dir() else set()
+          if actual != expected:
+              print("Expected only these distributions:", file=sys.stderr)
+              print(*sorted(expected), sep="\n", file=sys.stderr)
+              print("Found:", file=sys.stderr)
+              print(*sorted(actual), sep="\n", file=sys.stderr)
+              raise SystemExit(1)
+          PY
+
+      - name: Verify the built wheel and source distribution
+        run: |
+          set -euo pipefail
+          package_version="$(python3 - <<'PY'
+          import tomllib
+          from pathlib import Path
+
+          with Path("pyproject.toml").open("rb") as package_file:
+              print(tomllib.load(package_file)["project"]["version"])
+          PY
+          )"
+          verify_distribution() {
+            distribution="$1"
+            workspace="$(mktemp -d)"
+            environment="${workspace}/environment"
+            receiver="${workspace}/receiver"
+
+            python3 -m venv "${environment}"
+            mkdir "${receiver}"
+            "${environment}/bin/pip" install --no-deps "${distribution}"
+            test "$("${environment}/bin/sdf" --version)" = "software-dark-factory ${package_version}"
+            "${environment}/bin/sdf" --identity | grep -Fx "package_version: ${package_version}"
+            "${environment}/bin/sdf" --identity | grep -Fx "installation_mode: installed"
+            "${environment}/bin/sdf" --help | grep -F "usage: sdf"
+            "${environment}/bin/sdf" init --repo "${receiver}"
+            grep -Fx "front_door_release: \"v${package_version}\"" "${receiver}/.sdf/config.yml"
+            grep -Fx "front_door_package: \"software-dark-factory ${package_version}\"" "${receiver}/.sdf/config.yml"
+          }
+
+          verify_distribution dist/*.whl
+          verify_distribution dist/*.tar.gz
+
+      - name: Upload verified distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+          retention-days: 7
+
+  publish:
+    name: Publish distributions to PyPI
+    needs: build-and-verify
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download verified distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Publish distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
