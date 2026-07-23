@@ -23,7 +23,20 @@ class SourceDistributionPackagingSmokeTest(PackagingSmokeTestCase):
             distributions.mkdir()
 
             sdist = self._build_pep517_sdist(source_export, distributions)
+            self._assert_sdist_excludes_repository_only_content(sdist)
             self._assert_installed_sdist_initializes_receiver(sdist, workspace)
+
+    def _assert_sdist_excludes_repository_only_content(self, sdist: Path) -> None:
+        with tarfile.open(sdist) as archive:
+            contents = archive.getnames()
+        self.assertFalse(
+            any("/tests/" in name or name.endswith("/tests") for name in contents),
+            contents,
+        )
+        self.assertFalse(
+            any("/scripts/" in name or name.endswith("/scripts") for name in contents),
+            contents,
+        )
 
     def _build_pep517_sdist(self, source_export: Path, distributions: Path) -> Path:
         self._run(

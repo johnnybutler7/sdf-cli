@@ -9,6 +9,9 @@ from sdf_cli.evidence_archive_check_helpers import (
     front_matter_status,
     required_headings_for,
 )
+from sdf_cli.evidence_archive_check_rendering import (
+    render_evidence_archive_check as _render_evidence_archive_check,
+)
 from sdf_cli.evidence_archive_contract import (
     REQUIRED_ARCHIVE_HEADINGS,
     archive_required_files,
@@ -121,51 +124,7 @@ def check_evidence_archive(repo: str, change_id: str) -> EvidenceArchiveCheckRes
 
 
 def render_evidence_archive_check(result: EvidenceArchiveCheckResult) -> str:
-    lines = [
-        f"Evidence archive check: {result.archive_path}",
-        f"Resolved repository path: {result.repo_path.resolve()}",
-        f"status: {_status(result)}",
-    ]
-    if result.invalid_reason is not None:
-        lines.append(result.invalid_reason)
-        return "\n".join(lines)
-
-    if not result.archive_exists:
-        lines.append(f"missing archive: {result.archive_path}")
-        return "\n".join(lines)
-
-    for file in result.files:
-        if file.exists:
-            lines.append(f"present: {file.filename}")
-        else:
-            lines.append(f"missing file: {file.filename}")
-            continue
-        for heading in file.missing_headings:
-            lines.append(f"missing heading in {file.filename}: {heading}")
-        for missing_verification_status in file.missing_verification_statuses:
-            lines.append(
-                f"missing verification status in {file.filename}: "
-                f"{missing_verification_status}"
-            )
-        for placeholder in file.unresolved_placeholders:
-            lines.append(
-                "unresolved scaffold placeholder in "
-                f"{file.filename} {placeholder.section}: {placeholder.marker}"
-            )
-        if file.front_matter_error:
-            lines.append(
-                f"invalid machine record in {file.filename}: {file.front_matter_error}"
-            )
-
-    if _has_unresolved_placeholders(result.files):
-        lines.extend(
-            [
-                "recovery: replace scaffold prompts with specific evidence; "
-                "the checker is read-only and does not auto-fill evidence.",
-            ]
-        )
-
-    return "\n".join(lines)
+    return _render_evidence_archive_check(result)
 
 
 def _check_file(
@@ -188,43 +147,46 @@ def _check_file(
     front_matter_error, contract_version = front_matter_status(
         path, filename, archive_dir.name
     )
+    malformed_machine_record = front_matter_error is not None and (
+        not front_matter_error.startswith("historical or unsupported")
+    )
     if filename == "evidence.md":
         required_headings = required_headings_for(
             filename,
             contract_version=contract_version,
             embedded_verification=embedded_verification,
         )
+    if malformed_machine_record:
+        required_headings = ()
     return EvidenceArchiveFileCheck(
         filename=filename,
         exists=True,
         missing_headings=tuple(
             heading for heading in required_headings if heading not in headings
         ),
-        missing_verification_statuses=missing_verification_statuses(
-            filename,
-            content,
-            embedded_verification=embedded_verification,
-            contract_version=contract_version or 5,
+        missing_verification_statuses=(
+            ()
+            if malformed_machine_record
+            else missing_verification_statuses(
+                filename,
+                content,
+                embedded_verification=embedded_verification,
+                contract_version=contract_version or 5,
+            )
         ),
-        unresolved_placeholders=unresolved_scaffold_placeholders(
-            filename,
-            content,
-            contract_version=contract_version or 5,
+        unresolved_placeholders=(
+            ()
+            if malformed_machine_record
+            else unresolved_scaffold_placeholders(
+                filename,
+                content,
+                contract_version=contract_version or 5,
+            )
         ),
         front_matter_error=front_matter_error,
         contract_version=contract_version,
     )
 
-
-def _has_unresolved_placeholders(files: tuple[EvidenceArchiveFileCheck, ...]) -> bool:
-    return any(file.unresolved_placeholders for file in files)
-
-def _status(result: EvidenceArchiveCheckResult) -> str:
-    if result.passed:
-        return "ready"
-    if result.historical:
-        return "historical (unsupported by current commands)"
-    return "not ready"
 
 def _heading_lines(markdown: str) -> set[str]:
     return {line.strip() for line in markdown.splitlines() if line.startswith("#")}

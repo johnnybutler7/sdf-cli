@@ -7,6 +7,7 @@ from sdf_cli.config.verification_focused_parser import (
     focused_visibility_issues,
     parse_focused_subsets,
 )
+from sdf_cli.config.verification_scalar import parse_scalar
 
 
 def parse_verification_lines(
@@ -141,7 +142,7 @@ def _top_level_value(lines: list[str], key: str) -> str | None:
         if stripped == prefix:
             return ""
         if stripped.startswith(f"{prefix} "):
-            return _unquote(stripped.removeprefix(prefix).strip())
+            return parse_scalar(stripped.removeprefix(prefix))
     return None
 
 
@@ -156,15 +157,10 @@ def _add_field(item: dict[str, str], stripped: str) -> str | None:
     key, separator, value = stripped.partition(":")
     if not separator:
         return f"invalid command field: {stripped}"
-    item[key.strip()] = _unquote(value.strip())
+    field = key.strip()
+    item[field] = parse_scalar(value, preserve_hash=field == "command")
     return None
 
 
 def _is_top_level_line(raw_line: str) -> bool:
     return bool(raw_line.strip()) and not raw_line.startswith((" ", "\t"))
-
-
-def _unquote(value: str) -> str:
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
-        return value[1:-1]
-    return value

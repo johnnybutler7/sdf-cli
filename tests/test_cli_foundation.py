@@ -101,6 +101,13 @@ class CliFoundationTest(unittest.TestCase):
         )
         self.assertNotIn("install manifest", help_text)
 
+    def test_top_level_help_separates_long_command_names_from_descriptions(self):
+        help_text = build_parser().format_help()
+
+        self.assertIn(
+            "publish-open-pr-body  Workflow/internal: standardize", help_text
+        )
+
     def test_start_help_names_archive_handoff_as_current_path(self):
         stdout = io.StringIO()
 

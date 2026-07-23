@@ -49,6 +49,10 @@ local source checkout in editable mode:
 pipx install --editable .
 ```
 
+The PyPI distribution is **`software-dark-factory`**. Do not infer a PyPI
+package name from this repository or the `sdf` executable: `sdf-cli` and `sdf`
+are not this project's distribution names.
+
 If you prefer a virtual environment, the equivalent intended PyPI route after
 release will be:
 
@@ -72,10 +76,12 @@ sdf status
 sdf guidance
 ```
 
-`sdf init` installs missing portable SDF files but leaves existing
-repository-owned files in place. The starter `.sdf/verification.yml` is an
-intentional placeholder: define the checks your repository trusts before
-running `sdf verify`.
+`sdf init` may create `.sdf/` (including its guidance, contracts,
+`config.yml`, and starter `verification.yml`) plus root `AGENTS.md` and
+`CLAUDE.md` entries. It does not silently replace existing files; when managed
+`.gitignore` or `.gitattributes` entries are missing, it may append them. The
+starter `.sdf/verification.yml` is an intentional placeholder: define the
+checks your repository trusts before running `sdf verify`.
 
 For the smallest governed change, start an archive, make the change, complete
 its reviewer judgement, and close it:
@@ -128,8 +134,10 @@ them; SDF does not invent those claims.
 
 - Developer Preview / Alpha for local repository workflows.
 - Python 3.11 through 3.14.
-- Hosted CI currently covers compatibility checks on Python 3.11–3.14 and a
-  wheel-packaging smoke test on Python 3.11.
+- Hosted CI covers compatibility checks on Python 3.11–3.14 plus wheel and
+  source-distribution packaging smokes on Python 3.11.
+- Supported and tested on Linux and macOS-style POSIX environments. Windows is
+  not currently tested or claimed.
 - No correctness, approval, merge, repair, deployment, or production-readiness
   claim.
 

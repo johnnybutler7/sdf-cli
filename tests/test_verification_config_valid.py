@@ -54,6 +54,36 @@ commands:
         self.assertTrue(config.valid)
         self.assertTrue(config.commands[0].track_timing)
 
+    def test_scalar_fields_accept_trailing_comments(self):
+        config = load_config(
+            """
+version: 1  # config version
+commands:
+  - name: optional-check  # readable label
+    command: python3 -m unittest
+    required: false  # nonblocking feedback
+    track_timing: true  # preserve timing context
+"""
+        )
+
+        self.assertTrue(config.valid)
+        self.assertFalse(config.commands[0].required)
+        self.assertTrue(config.commands[0].track_timing)
+
+    def test_command_hashes_and_quoted_hashes_are_preserved(self):
+        config = load_config(
+            """
+version: 1
+commands:
+  - name: "unit # focused"
+    command: printf '# keep this hash'
+"""
+        )
+
+        self.assertTrue(config.valid)
+        self.assertEqual(config.commands[0].name, "unit # focused")
+        self.assertEqual(config.commands[0].command, "printf '# keep this hash'")
+
     def test_command_order_is_preserved(self):
         config = load_config(
             """
