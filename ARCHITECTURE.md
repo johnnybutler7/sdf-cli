@@ -65,7 +65,10 @@ flowchart TD
   start -->|no| change["Ordinary human or agent change"]
   archive --> change
   change --> verify["Run receiver commands from\n.sdf/verification.yml"]
-  verify --> close["sdf close"]
+  verify --> checks{"Required checks pass?"}
+  checks -->|no| respond["Human or coding agent revises the change,\nor identifies a genuine blocker or limitation"]
+  respond --> verify
+  checks -->|yes| close["sdf close"]
   close --> first{"Archive and four judgement\nsections complete?"}
   first -->|no: first close can scaffold and stop| judgement["Humans complete Intent, Review focus,\nLimits, and Guidance applied"]
   judgement --> close
@@ -77,6 +80,8 @@ flowchart TD
   review --> finalise["Optional post-merge finalisation:\ndurable merge-SHA evidence links"]
   verify -. "CI remains the final enforcing boundary" .-> ci["Repository CI"]
 ```
+
+Required verification failures return work to the delivery loop: a human engineer or coding agent operating under repository guidance may revise the implementation and rerun the checks, or surface a genuine unresolved blocker or limitation honestly. SDF does not repair the change itself; it preserves verification history, including whether a final passing run followed earlier failures. Required failures block a passing closeout, while optional checks stay reviewer-visible but non-blocking; CI remains the final enforcing boundary and human review remains the merge decision.
 
 `sdf start` is useful but not mandatory. A close-first workflow can run the
 configured verification and scaffold missing evidence, then stop until a human
