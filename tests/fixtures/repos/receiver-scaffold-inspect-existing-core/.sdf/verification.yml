@@ -1,0 +1,5 @@
+version: 1
+commands:
+  - name: receiver-owned-tests
+    command: "python -m pytest"
+    required: true

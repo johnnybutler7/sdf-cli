@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    name: Compatibility (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install test dependencies
+        run: python3 -m pip install -e ".[test]"
+
+      - name: Run Ruff
+        run: python3 -m ruff check src tests
+
+      - name: Run Python module-size audit
+        run: python3 scripts/check_python_module_size.py src tests
+
+      - name: Check documented SDF command consistency
+        run: python3 scripts/check_documented_sdf_commands.py --repo .
+
+      - name: Check source CLI help
+        run: PYTHONPATH=src python3 -m sdf_cli.main --help
+
+      - name: Check source CLI version
+        run: PYTHONPATH=src python3 -m sdf_cli.main --version
+
+      - name: Check source repository status
+        run: PYTHONPATH=src python3 -m sdf_cli.main status --repo .
+
+      - name: Check source repository guidance
+        run: PYTHONPATH=src python3 -m sdf_cli.main guidance --repo .
+
+      - name: Run unit tests except wheel packaging smoke
+        run: |
+          PYTHONPATH=src:tests python3 -m unittest \
+            $(find tests -maxdepth 1 -name 'test_*.py' \
+              ! -name 'test_wheel_packaging_smoke.py' \
+              -exec basename {} .py \; | sort)
+
+  wheel-packaging-smoke:
+    name: Wheel packaging smoke (Python 3.11)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test dependencies
+        run: python3 -m pip install -e ".[test]"
+
+      - name: Run wheel packaging smoke
+        run: PYTHONPATH=src python3 -m unittest tests.test_wheel_packaging_smoke

@@ -1,0 +1,8 @@
+repo: missing-receiver-playbook
+automatic_execution_permitted: false
+receiver_playbooks:
+  - name: Missing Python playbook
+    path: docs/playbooks/python/missing.md
+    categories:
+      - implementation
+      - python

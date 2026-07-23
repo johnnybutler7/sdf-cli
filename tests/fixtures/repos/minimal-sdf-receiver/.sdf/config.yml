@@ -1,0 +1,14 @@
+repo: minimal-sdf-receiver
+automatic_execution_permitted: false
+receiver_playbooks:
+  - name: Minimal product north star
+    path: docs/product/north-star.md
+    categories:
+      - product
+      - north_star
+  - name: Minimal Python playbook
+    path: docs/playbooks/python/README.md
+    categories:
+      - implementation
+      - python
+      - cli

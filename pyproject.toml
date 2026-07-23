@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "software-dark-factory"
+version = "0.1.0"
+description = "Developer Preview: a Python CLI and portable repository Front Door for making repository-defined guidance, verification, and delivery evidence executable before human review."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [
+  { name = "Software Dark Factory" },
+  { name = "John Butler" },
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+]
+dependencies = []
+
+[project.urls]
+Source = "https://github.com/johnnybutler7/sdf-cli"
+Issues = "https://github.com/johnnybutler7/sdf-cli/issues"
+
+[project.optional-dependencies]
+test = [
+  "PyYAML>=6.0",
+  "ruff>=0.5",
+  "setuptools>=70.1",
+]
+
+[project.scripts]
+sdf = "sdf_cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sdf_cli = [
+  "resources/portable_sdf/sdf/*.md",
+  "resources/portable_sdf/sdf/contracts/*.md",
+  "resources/portable_sdf/sdf/playbooks/*.md",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "W",
+]

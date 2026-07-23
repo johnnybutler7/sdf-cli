@@ -1,0 +1,1 @@
+recursive-include src/sdf_cli/resources/portable_sdf *.md

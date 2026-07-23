@@ -1,0 +1,53 @@
+name: Publish Open PR SDF Body
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Open draft PR number to inspect and standardize
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: publish-open-pr-body-${{ inputs.pr_number }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish eligible Cloud PR reviewer handoff
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out trusted default branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted-base
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Publish from API-fetched committed evidence
+        working-directory: trusted-base
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          PYTHONPATH: ${{ github.workspace }}/trusted-base/src
+        run: |
+          if [[ ! "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+            echo "pr_number must be a positive integer" >&2
+            exit 2
+          fi
+          python3 -m sdf_cli.main publish-open-pr-body \
+            --pr-number "$PR_NUMBER" \
+            --github-repo "$GITHUB_REPOSITORY" \
+            --base-branch "$DEFAULT_BRANCH"

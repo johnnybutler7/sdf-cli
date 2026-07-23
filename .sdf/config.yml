@@ -1,0 +1,56 @@
+repo: sdf-cli
+kind: python-cli
+governance_mode: required
+automatic_execution_permitted: false
+front_door_release: "v0.1.0"
+front_door_package: "software-dark-factory 0.1.0"
+evidence_dir: .sdf/evidence
+work_items_dir: .sdf/work-items
+receiver_playbooks:
+  - name: SDF CLI engineering discipline
+    path: docs/playbooks/engineering/README.md
+    categories:
+      - engineering
+      - architecture
+      - maintainability
+      - design
+      - boundaries
+      - testing
+  - name: SDF CLI Python guidance
+    path: docs/playbooks/python/README.md
+    categories:
+      - implementation
+      - python
+      - cli
+      - architecture
+      - filesystem
+      - git
+      - subprocess
+      - testing
+      - fixtures
+      - golden_outputs
+      - packaging
+      - resources
+      - tooling
+      - quality
+      - linting
+      - typing
+      - dependencies
+      - learning
+  - name: SDF CLI product guidance
+    path: docs/product/README.md
+    categories:
+      - product
+      - north_star
+      - decision_context
+      - evidence
+      - dogfood
+      - workflow
+      - boundaries
+      - provenance
+  - name: SDF CLI verification guidance
+    path: docs/verification/README.md
+    categories:
+      - verification
+      - fixtures
+      - golden_outputs

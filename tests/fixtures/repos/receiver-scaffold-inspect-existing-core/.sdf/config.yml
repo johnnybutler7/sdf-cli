@@ -1,0 +1,4 @@
+repo: existing-core-receiver
+automatic_execution_permitted: false
+evidence_dir: .sdf/evidence
+work_items_dir: .sdf/work-items

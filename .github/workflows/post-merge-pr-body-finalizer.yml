@@ -1,0 +1,41 @@
+name: Post-Merge PR Body Finalizer
+
+on:
+  pull_request:
+    types:
+      - closed
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  finalize:
+    name: Finalize SDF PR body evidence links
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out landed base ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install sdf CLI
+        run: python3 -m pip install -e .
+
+      - name: Finalize merged PR body
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sdf finalize-merged \
+            --pr-number "${{ github.event.pull_request.number }}" \
+            --github-repo "${{ github.repository }}" \
+            --merge-sha "${{ github.event.pull_request.merge_commit_sha }}"
