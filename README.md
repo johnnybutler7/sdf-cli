@@ -71,14 +71,26 @@ decisions.
 
 ## Try SDF with a coding agent
 
+> **Developer Preview:** Try SDF first in a disposable or example repository,
+> disposable clone, or dedicated evaluation branch—preferably in a separate
+> Git worktree. Start from a clean worktree, keep unrelated work out of the
+> evaluation, and review every proposed change before committing or pushing it.
+
 Point your coding agent at the [Getting Started guide](GETTING-STARTED.md) and
-ask it to install and configure Software Dark Factory for the repository. Ask
-it to use the documented commands, build `.sdf/verification.yml` from checks
-the repository already trusts, and show the full diff before anything is
-committed.
+ask it to install and configure Software Dark Factory for the repository. For
+example:
+
+> Read the Getting Started guide and help me evaluate Software Dark Factory in
+> this repository. First confirm the current worktree is clean. Do not modify
+> the default branch. Create a dedicated evaluation branch, preferably in a
+> separate Git worktree. Use only the documented SDF commands, build
+> `.sdf/verification.yml` from checks this repository already trusts, and show
+> me the complete diff. Do not commit, push, or open a pull request until I
+> approve the proposed changes.
 
 You can follow the same steps manually. In either case, review the installed
-Front Door, configuration, and verification boundary before committing them.
+Front Door, configuration, verification boundary, and complete diff before
+deciding whether to commit, push, or open a pull request.
 
 ## Installation
 
