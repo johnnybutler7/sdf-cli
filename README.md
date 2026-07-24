@@ -10,6 +10,9 @@ review evidence executable before human review.
 Your team defines what acceptable delivery means. SDF makes those standards,
 checks, and evidence executable before human review.
 
+SDF exists to help teams benefit from agentic speed without lowering the
+engineering bar.
+
 ## Engineering overview
 
 SDF keeps repository policy with the repository and makes the execution,
@@ -31,18 +34,32 @@ Representative implementation: [verification command execution](src/sdf_cli/veri
 
 ## The problem
 
-Teams increasingly use AI assistance, but a useful change still needs to meet
-the repository's own acceptance boundary: its guidance, playbooks, tests,
-risks, and review expectations. Those requirements are often scattered across
-documents and tooling, which makes them easy to miss and hard for a reviewer to
-reconstruct.
+AI lets more people and coding agents produce more software changes, faster.
+Those changes may come from experienced engineers, newer engineers, people
+outside traditional engineering roles using agents, and different coding tools
+or workflows.
+
+As the volume and variation of changes increase, pull requests can arrive with
+uneven scope, engineering standards, verification, evidence, and review
+context. Reviewers are then left to reconstruct what was requested, which
+repository expectations applied, what checks actually ran, and what risks or
+limits remain.
+
+A useful change still needs to meet the repository's own acceptance boundary:
+its guidance, playbooks, tests, risks, and review expectations. SDF makes that
+boundary more executable and carries the resulting context, verification
+history, and evidence into a consistent human reviewer handoff.
+
+SDF supports the acceptance decision. It does not approve, merge, deploy, or
+prove that the change is correct.
 
 ## What SDF does
 
 - Installs a portable repository Front Door and a local `.sdf` operating area.
-- Reads repository-owned guidance and configured verification checks.
-- Runs the repository-defined verification boundary during closeout.
-- Creates structured, per-change evidence for human review.
+- Reads repository-owned guidance, playbooks, and configured verification checks.
+- Runs and records the repository-defined verification boundary during closeout.
+- Preserves passed, failed, and blocked verification history.
+- Produces structured, per-change evidence and a consistent handoff for human PR review.
 
 ## What SDF does not do
 
