@@ -96,6 +96,21 @@ class InitCommandTest(unittest.TestCase):
             self.assertEqual(exit_code, 0)
             self.assertEqual(original, matching_path.read_text(encoding="utf-8"))
 
+    def test_clean_receiver_includes_agent_operating_responsibility(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory)
+
+            with redirect_stdout(io.StringIO()):
+                exit_code = main(["init", "--repo", str(repo)])
+
+            self.assertEqual(exit_code, 0)
+            instructions = (repo / ".sdf" / "agent-instructions.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("## Operating responsibility", instructions)
+            self.assertIn("execute the routine SDF loop", instructions)
+            self.assertIn("Do not invent repository standards", instructions)
+
     def test_default_init_reports_and_preserves_drifted_receiver_file(self):
         with tempfile.TemporaryDirectory() as directory:
             repo = Path(directory)

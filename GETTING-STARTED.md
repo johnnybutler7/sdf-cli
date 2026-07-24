@@ -1,9 +1,8 @@
 # Getting started with Software Dark Factory
 
-This guide creates a small local example. It needs no external service or
-GitHub account. The example demonstrates the boundary that matters: the
-repository owns the standards and checks; SDF executes that acceptance boundary
-and records evidence for human review.
+SDF is designed for a coding agent to use while completing bounded work in a
+repository. The repository owner configures the local standards and verification
+boundary; the agent follows them and prepares evidence for human review.
 
 ## Prerequisites
 
@@ -12,25 +11,19 @@ and records evidence for human review.
   environment support.
 - Git, for the example repository and its final local commit.
 
-## Install SDF
+## Install and configure SDF with a coding agent
 
-After the public 0.1.0 release is available on PyPI, install it with:
+Install the published package with:
 
 ```shell
 pipx install software-dark-factory
-```
-
-That package is not published to PyPI yet. From a local source checkout, run:
-
-```shell
-pipx install --editable .
 ```
 
 The PyPI distribution is **`software-dark-factory`**. Do not infer a PyPI
 package name from this repository or the `sdf` executable: `sdf-cli` and `sdf`
 are not this project's distribution names.
 
-With a virtual environment, use the intended post-release installation route:
+With a virtual environment:
 
 ```shell
 python3 -m venv .venv
@@ -39,10 +32,18 @@ python -m pip install --upgrade pip
 python -m pip install software-dark-factory
 ```
 
-For a local source checkout, use `python -m pip install --editable .` instead
-of the final command.
+Editable installation is for contributors or local source development only:
+use `pipx install --editable .`, or replace the final virtual-environment
+command with `python -m pip install --editable .`.
 
-Confirm the command and the implementation you are running:
+Ask a coding agent to inspect the repository and initialise SDF
+non-destructively. The [installation-agent prompt](README.md#prompt-for-an-installation-agent)
+in the README is the recommended copyable request. An agent that reads a
+repository entry point such as `AGENTS.md` or `CLAUDE.md` will then be directed
+to the installed SDF guidance.
+
+The agent normally runs these inspection commands as part of installation. A
+repository owner may also run them to inspect the result:
 
 ```shell
 sdf --help
@@ -50,7 +51,62 @@ sdf --version
 sdf --identity
 ```
 
-## Create a clean receiver repository
+## What the repository owner decides
+
+The repository owner decides or approves:
+
+- whether governance is active;
+- the trusted verification boundary;
+- repository-owned playbooks and standards;
+- known exceptions or blockers;
+- review, approval, and merge.
+
+SDF does not let an agent determine these policy decisions on the owner's
+behalf.
+
+## What the coding agent executes
+
+When its tools and permissions allow, the coding agent performing the change
+should read `AGENTS.md`, `CLAUDE.md`, and `.sdf/agent-instructions.md` where
+applicable; inspect `.sdf/config.yml` and `.sdf/verification.yml`; and run
+`sdf guidance`. It loads only relevant receiver playbooks, makes the smallest
+bounded change, uses `sdf start` when useful, records concise evidence, uses
+`sdf close` for configured closeout, commits the evidence with the
+implementation, and refreshes the final checked handoff.
+
+The agent stops and asks for human input when repository policy, permissions,
+or the trusted verification boundary are genuinely ambiguous. It does not
+invent repository standards or verification commands.
+
+## Give the first governed change
+
+After configuration, ask for the outcome rather than manually coordinating the
+loop:
+
+```text
+Implement <describe the change>.
+
+Follow this repository's installed SDF guidance and applicable receiver
+playbooks. Keep the change bounded, use the configured verification boundary,
+record concise evidence, and prepare the final checked handoff for human review.
+
+Do not invent replacement checks, bypass required failures, approve, or merge
+the change.
+```
+
+## Inspect the result as a human reviewer
+
+Review the code, evidence, configured verification results, and final handoff.
+SDF supports that acceptance decision; it does not approve, merge, deploy, or
+prove the change correct.
+
+## Manual command reference and troubleshooting
+
+The following manual sequence is useful for inspecting an installation,
+troubleshooting an agent run, learning the CLI, or deliberately operating the
+loop by hand. It is not the recommended daily workflow.
+
+### Create a clean receiver repository
 
 Choose a temporary location, then initialise a Git repository and install the
 Front Door:
@@ -109,13 +165,7 @@ sdf verify
 `--check` is read-only. `sdf verify` runs only the commands the receiver has
 configured; it does not create evidence, approve a change, or contact GitHub.
 
-## Current support boundary
-
-This Developer Preview is tested on Linux and macOS-style POSIX environments;
-Windows is not currently tested or claimed. Hosted CI covers Python 3.11–3.14,
-plus wheel and source-distribution packaging smokes on Python 3.11.
-
-## Start and close a small governed change
+### Start and close a small governed change
 
 Start an evidence archive before making a small ordinary change:
 
@@ -156,10 +206,16 @@ local handoff is under `.sdf/handoffs/add-greeting/`. Read both before opening
 any manually reviewed pull request. SDF does not create, approve, merge, or
 deploy that pull request.
 
-## Remove the example safely
+### Remove the example safely
 
 Leave the example directory, confirm that you are in its parent and that the
 directory name is exactly `sdf-example`, then remove it using your operating
 system's Trash or file manager. Do not run a recursive deletion command until
 you have checked the path. If you created a virtual environment only for this
 example, remove that environment separately after confirming its location.
+
+## Current support boundary
+
+This Developer Preview is tested on Linux and macOS-style POSIX environments;
+Windows is not currently tested or claimed. Hosted CI covers Python 3.11–3.14,
+plus wheel and source-distribution packaging smokes on Python 3.11.

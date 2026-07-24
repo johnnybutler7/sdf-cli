@@ -13,6 +13,67 @@ checks, and evidence executable before human review.
 SDF exists to help teams benefit from agentic speed without lowering the
 engineering bar.
 
+## Recommended use: let the coding agent run SDF
+
+SDF is exposed through a CLI so coding agents have a deterministic,
+repository-local execution surface. It is not intended to make a human manually
+orchestrate every `sdf start`, evidence update, `sdf close`, and handoff refresh.
+
+A repository owner installs and configures SDF once. For each governed change,
+the coding agent reads the installed Front Door, loads relevant
+repository-owned guidance, makes the bounded change, runs the configured
+verification boundary, records concise evidence, and prepares a checked
+handoff for human review.
+
+Humans define repository standards and retain review, approval, and merge
+control. Agents that read repository entry points such as `AGENTS.md` or
+`CLAUDE.md` are directed to the installed SDF guidance.
+
+### Prompt for an installation agent
+
+Copy this prompt when asking a coding agent to install SDF in a repository:
+
+```text
+Read this README and install Software Dark Factory for this repository.
+
+Use the published `software-dark-factory` package. Inspect the repository before
+changing files, then initialise SDF non-destructively.
+
+Preserve existing repository instructions and receiver-owned files. Inspect the
+repository's existing test, lint, type-checking, build, and security commands.
+Configure the smallest useful `.sdf/verification.yml` using only commands the
+repository already trusts.
+
+Do not invent verification commands. When the correct verification boundary is
+ambiguous, stop and ask me to decide.
+
+Run `sdf status` and `sdf guidance`, then report:
+
+- what SDF installed or changed;
+- which existing files were preserved;
+- the proposed verification boundary;
+- any repository-specific playbooks that may be useful;
+- any decisions or blockers that need human input.
+
+Do not start an application feature, open a pull request, approve, or merge
+anything as part of installation.
+```
+
+### Prompt for an ordinary governed change
+
+Normally request the outcome you need, rather than directing every SDF command:
+
+```text
+Implement <describe the change>.
+
+Follow this repository's installed SDF guidance and applicable receiver
+playbooks. Keep the change bounded, use the configured verification boundary,
+record concise evidence, and prepare the final checked handoff for human review.
+
+Do not invent replacement checks, bypass required failures, approve, or merge
+the change.
+```
+
 ## Engineering overview
 
 SDF keeps repository policy with the repository and makes the execution,
@@ -97,6 +158,10 @@ with `python -m pip install --editable .`.
 
 ## First use
 
+An installation agent will normally run these commands while setting up the
+repository. A repository owner can also run them to inspect the result; they
+are manual reference commands, not the usual governed-change journey:
+
 From the root of the repository you want to govern:
 
 ```shell
@@ -112,24 +177,9 @@ sdf guidance
 starter `.sdf/verification.yml` is an intentional placeholder: define the
 checks your repository trusts before running `sdf verify`.
 
-For the smallest governed change, start an archive, make the change, complete
-its reviewer judgement, and close it:
-
-```shell
-sdf start --change-id add-example
-# Make the ordinary repository change and complete the four sections in
-# .sdf/evidence/add-example/evidence.md.
-sdf close --change-id add-example
-```
-
-`sdf close` runs the repository-defined checks and records their result. After
-committing the change and evidence, refresh the checked local reviewer handoff:
-
-```shell
-sdf close --change-id add-example --refresh-handoff
-```
-
-See [GETTING-STARTED.md](GETTING-STARTED.md) for a complete, local example.
+The coding agent follows the installed loop for ordinary governed work. See
+[GETTING-STARTED.md](GETTING-STARTED.md) for the agent-led path and its
+secondary manual command reference.
 
 ## The governed workflow
 
