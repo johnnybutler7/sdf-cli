@@ -22,13 +22,6 @@ pull request.
 Use a lighter hand only when the operator explicitly scopes out a step. Record
 that exception in evidence, run notes, or the PR body.
 
-## Operating responsibility
-
-The coding agent performing the change owns routine execution of this loop when
-its tools and permissions allow. Involve the operator for decisions and genuine
-blockers, not to manually run each command. The result is a checked handoff for
-human review; it does not approve or merge the change.
-
 ## Sequence
 
 1. Inspect receiver readiness.
@@ -82,7 +75,7 @@ human review; it does not approve or merge the change.
 
 6. Scaffold evidence when a one-pass closeout is wanted.
 
-   After the bounded change, use `sdf start` only when an agent-populated archive
+   After the bounded change, use `sdf start` only when a human-populated archive
    is needed before one passing closeout. It scaffolds that archive and records
    any available declared run context. `sdf start` is also useful earlier for
    long-running, risky, multi-session, or context-sensitive work that benefits

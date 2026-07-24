@@ -13,17 +13,16 @@ checks, and evidence executable before human review.
 SDF exists to help teams benefit from agentic speed without lowering the
 engineering bar.
 
-## Recommended use: let the coding agent run SDF
+## Recommended use: point your coding agent at this README
 
-SDF is exposed through a CLI so coding agents have a deterministic,
-repository-local execution surface. It is not intended to make a human manually
-orchestrate every `sdf start`, evidence update, `sdf close`, and handoff refresh.
+SDF is distributed through a CLI, but people are not expected to manually
+coordinate every SDF command. Point your coding agent at this README and ask it
+to install and configure SDF for your repository.
 
-A repository owner installs and configures SDF once. For each governed change,
-the coding agent reads the installed Front Door, loads relevant
-repository-owned guidance, makes the bounded change, runs the configured
-verification boundary, records concise evidence, and prepares a checked
-handoff for human review.
+The agent should inspect the repository before configuring verification. The
+repository owner decides any genuinely ambiguous policy or verification-boundary
+questions. For later work, ask the agent for the software outcome you need; it
+then follows the installed repository guidance.
 
 Humans define repository standards and retain review, approval, and merge
 control. Agents that read repository entry points such as `AGENTS.md` or
@@ -37,26 +36,22 @@ Copy this prompt when asking a coding agent to install SDF in a repository:
 Read this README and install Software Dark Factory for this repository.
 
 Use the published `software-dark-factory` package. Inspect the repository before
-changing files, then initialise SDF non-destructively.
+changing files, initialise SDF non-destructively, and preserve existing
+repository-owned instructions.
 
-Preserve existing repository instructions and receiver-owned files. Inspect the
-repository's existing test, lint, type-checking, build, and security commands.
-Configure the smallest useful `.sdf/verification.yml` using only commands the
-repository already trusts.
+Inspect the repository's existing test, lint, type-checking, build, and security
+commands. Propose the smallest useful `.sdf/verification.yml` using only commands
+the repository already trusts.
 
-Do not invent verification commands. When the correct verification boundary is
-ambiguous, stop and ask me to decide.
+Do not invent verification commands. Ask me to decide when the trusted
+verification boundary or repository policy is genuinely ambiguous.
 
-Run `sdf status` and `sdf guidance`, then report:
+Run `sdf status` and `sdf guidance`, then report what was installed, what was
+preserved, the proposed verification boundary, and any decisions or blockers
+requiring human input.
 
-- what SDF installed or changed;
-- which existing files were preserved;
-- the proposed verification boundary;
-- any repository-specific playbooks that may be useful;
-- any decisions or blockers that need human input.
-
-Do not start an application feature, open a pull request, approve, or merge
-anything as part of installation.
+Do not begin an application feature, approve, or merge anything as part of
+installation.
 ```
 
 ### Prompt for an ordinary governed change

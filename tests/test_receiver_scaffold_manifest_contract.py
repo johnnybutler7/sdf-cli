@@ -125,20 +125,6 @@ class ReceiverScaffoldManifestContractTest(unittest.TestCase):
             {path for path in links if path.startswith(".sdf/contracts/")},
         )
 
-    def test_packaged_agent_instructions_assign_routine_loop_to_coding_agent(self):
-        agent_instructions = starter_content(".sdf/agent-instructions.md")
-
-        self.assertIn("## Operating responsibility", agent_instructions)
-        self.assertIn("execute the routine SDF loop", agent_instructions)
-        self.assertIn(
-            "Do not invent repository standards or verification commands",
-            agent_instructions,
-        )
-        self.assertIn(
-            "Humans retain standards, review, approval, and merge control",
-            agent_instructions,
-        )
-
     def test_playbook_contract_references_are_packaged_contracts(self):
         packaged_contracts = {
             path

@@ -1,8 +1,11 @@
 # Getting started with Software Dark Factory
 
-SDF is designed for a coding agent to use while completing bounded work in a
-repository. The repository owner configures the local standards and verification
-boundary; the agent follows them and prepares evidence for human review.
+Point your coding agent at the SDF README and ask it to install and configure
+SDF for the current repository. The agent inspects the repository,
+initialises SDF non-destructively, and proposes a verification boundary from
+commands the repository already trusts. The repository owner decides genuinely
+ambiguous policy or verification questions; humans retain review, approval, and
+merge control.
 
 ## Prerequisites
 
@@ -36,9 +39,9 @@ Editable installation is for contributors or local source development only:
 use `pipx install --editable .`, or replace the final virtual-environment
 command with `python -m pip install --editable .`.
 
-Ask a coding agent to inspect the repository and initialise SDF
-non-destructively. The [installation-agent prompt](README.md#prompt-for-an-installation-agent)
-in the README is the recommended copyable request. An agent that reads a
+Ask a coding agent to read the README and initialise SDF non-destructively.
+The [installation-agent prompt](README.md#prompt-for-an-installation-agent) in
+the README is the recommended copyable request. An agent that reads a
 repository entry point such as `AGENTS.md` or `CLAUDE.md` will then be directed
 to the installed SDF guidance.
 

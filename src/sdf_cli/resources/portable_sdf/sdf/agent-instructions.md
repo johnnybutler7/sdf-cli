@@ -8,19 +8,6 @@
   `governance_mode: inactive`, use the receiver's normal workflow unless the
   operator asks for the loop. Do not infer activation from another value.
 
-## Operating responsibility
-
-- For governed work, execute the routine SDF loop when your tools and
-  permissions allow. Do not return `sdf start`, evidence population, `sdf close`,
-  or handoff refresh to the operator as a routine checklist.
-- Ask the operator for decisions about repository policy, an ambiguous trusted
-  verification boundary, unavailable permissions, or acceptance of blockers.
-  Do not pause for non-material questions that local guidance can answer.
-- Do not invent repository standards or verification commands.
-- If `sdf` is unavailable, record the executable gap, read local SDF guidance,
-  and use receiver-owned checks where appropriate.
-- Humans retain standards, review, approval, and merge control.
-
 ## Routing
 
 - The single portable sequence is

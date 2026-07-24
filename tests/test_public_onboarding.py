@@ -6,9 +6,12 @@ class PublicOnboardingTest(unittest.TestCase):
     def test_readme_explains_agent_first_operating_model_and_prompts(self):
         readme = self._read("README.md")
 
-        self.assertIn("## Recommended use: let the coding agent run SDF", readme)
-        self.assertIn("deterministic", readme)
-        self.assertIn("repository-local execution surface", readme)
+        self.assertIn(
+            "## Recommended use: point your coding agent at this README", readme
+        )
+        self.assertIn("not expected to manually", readme)
+        self.assertIn("coordinate every SDF command", readme)
+        self.assertIn("Point your coding agent at this README", readme)
         self.assertIn("### Prompt for an installation agent", readme)
         self.assertIn("Read this README and install Software Dark Factory", readme)
         self.assertIn("### Prompt for an ordinary governed change", readme)
