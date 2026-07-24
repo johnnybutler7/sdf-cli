@@ -1,14 +1,19 @@
 # Getting started with Software Dark Factory
 
-This guide creates a small local example. It needs no external service or
-GitHub account. The example demonstrates the boundary that matters: the
-repository owns the standards and checks; SDF executes that acceptance boundary
-and records evidence for human review.
+This guide walks through a first evaluation in a small local example. It needs
+no external service or GitHub account. The example demonstrates the boundary
+that matters: the repository owns the standards and checks; SDF executes that
+acceptance boundary and records evidence for human review.
+
+For a first evaluation, use a disposable repository or clone, or a dedicated
+evaluation branch—preferably in a separate Git worktree. Begin from a clean Git
+state, keep unrelated work out of the evaluation, and do not run it directly
+on the repository's default branch. Review all proposed changes, especially
+`.sdf/verification.yml`, before deciding whether to commit or push.
 
 You can follow this guide manually, or point your coding agent at it and ask
 it to install and configure SDF for your repository. The commands are the same
-either way. Review all proposed repository changes—especially
-`.sdf/verification.yml`—before committing them.
+either way.
 
 ## Prerequisites
 
@@ -58,13 +63,14 @@ sdf --identity
 
 ## Create a clean receiver repository
 
-Choose a temporary location, then initialise a Git repository and install the
-Front Door:
+For the simplest route, choose a temporary location, then initialise a Git
+repository, enter a dedicated evaluation branch, and install the Front Door:
 
 ```shell
 mkdir sdf-example
 cd sdf-example
 git init
+git switch -c try/sdf
 sdf init
 ```
 
@@ -115,6 +121,13 @@ sdf verify
 `--check` is read-only. `sdf verify` runs only the commands the receiver has
 configured; it does not create evidence, approve a change, or contact GitHub.
 
+At this point, inspect the full diff from `sdf init` and the verification
+configuration before continuing. The intended evaluation order is: work in the
+isolated branch or worktree, install and initialise SDF, inspect the resulting
+diff, adapt and review `.sdf/verification.yml`, then run a small governed
+change. Review its evidence and handoff before deciding whether to commit,
+push, or open an evaluation pull request.
+
 ## Current support boundary
 
 This Developer Preview is tested on Linux and macOS-style POSIX environments;
@@ -149,7 +162,8 @@ result in the evidence machine record, and prepares a checked local handoff.
 If verification or the four evidence sections are incomplete, correct them and
 run the same `sdf close` command again.
 
-After reviewing the work locally, commit the change and its evidence:
+After reviewing the work locally, decide whether to keep the evaluation. Only
+then commit the change and its evidence:
 
 ```shell
 git add greeting.py tests/test_greeting.py .sdf
@@ -178,5 +192,8 @@ merge.
 Leave the example directory, confirm that you are in its parent and that the
 directory name is exactly `sdf-example`, then remove it using your operating
 system's Trash or file manager. Do not run a recursive deletion command until
-you have checked the path. If you created a virtual environment only for this
-example, remove that environment separately after confirming its location.
+you have checked the path. A disposable clone or worktree can be removed the
+same way after confirming its location; changes on a dedicated branch can be
+discarded through your normal Git review and cleanup process. If you created a
+virtual environment only for this example, remove that environment separately
+after confirming its location.
