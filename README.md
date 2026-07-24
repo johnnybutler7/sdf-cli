@@ -56,9 +56,10 @@ prove that the change is correct.
 ## What SDF does
 
 - Installs a portable repository Front Door and a local `.sdf` operating area.
-- Reads repository-owned guidance and configured verification checks.
-- Runs the repository-defined verification boundary during closeout.
-- Creates structured, per-change evidence for human review.
+- Reads repository-owned guidance, playbooks, and configured verification checks.
+- Runs and records the repository-defined verification boundary during closeout.
+- Preserves passed, failed, and blocked verification history.
+- Produces structured, per-change evidence and a consistent handoff for human PR review.
 
 ## What SDF does not do
 
