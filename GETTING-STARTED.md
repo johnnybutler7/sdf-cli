@@ -192,8 +192,9 @@ merge.
 Leave the example directory, confirm that you are in its parent and that the
 directory name is exactly `sdf-example`, then remove it using your operating
 system's Trash or file manager. Do not run a recursive deletion command until
-you have checked the path. A disposable clone or worktree can be removed the
-same way after confirming its location; changes on a dedicated branch can be
-discarded through your normal Git review and cleanup process. If you created a
-virtual environment only for this example, remove that environment separately
-after confirming its location.
+you have checked the path. A disposable clone can be removed using your
+operating system's Trash or file manager after confirming its location. Remove
+a linked worktree through your normal Git worktree cleanup process. Changes on
+a dedicated branch can be discarded through your normal Git review and cleanup
+process. If you created a virtual environment only for this example, remove
+that environment separately after confirming its location.
