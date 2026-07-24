@@ -4,6 +4,11 @@ These are repository-owned standards for shaping work in `sdf-cli`. They
 complement the portable governed change loop under `.sdf/`; they do not replace
 it or grant approval to merge.
 
+The public `sdf-cli` playbooks are working examples of repository-owned
+guidance used by this project itself. They are reference material, not universal
+standards or a set every receiver should copy wholesale; receiver repositories
+should create or adapt the smallest relevant playbook set for their own context.
+
 ## Select Guidance By Work Type
 
 - Read [Engineering Discipline](engineering/README.md) for a change that needs

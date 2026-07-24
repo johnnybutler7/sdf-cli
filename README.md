@@ -54,26 +54,18 @@ decisions.
 
 ## Installation
 
-After the 0.1.0 release is published to PyPI, the intended installation route
-will be:
+`software-dark-factory` version 0.1.0 is published on PyPI. The normal
+installation route is:
 
 ```shell
 pipx install software-dark-factory
-```
-
-`software-dark-factory` is not yet published to PyPI. Until then, install a
-local source checkout in editable mode:
-
-```shell
-pipx install --editable .
 ```
 
 The PyPI distribution is **`software-dark-factory`**. Do not infer a PyPI
 package name from this repository or the `sdf` executable: `sdf-cli` and `sdf`
 are not this project's distribution names.
 
-If you prefer a virtual environment, the equivalent intended PyPI route after
-release will be:
+If you prefer a virtual environment, install the published distribution with:
 
 ```shell
 python3 -m venv .venv
@@ -82,8 +74,9 @@ python -m pip install --upgrade pip
 python -m pip install software-dark-factory
 ```
 
-For a local source checkout, replace the final command with
-`python -m pip install --editable .`.
+Editable installation is for contributors or local source development. Use
+`pipx install --editable .` or replace the final virtual-environment command
+with `python -m pip install --editable .`.
 
 ## First use
 
@@ -139,6 +132,32 @@ that repository, the configuration, playbooks, checks, and evidence are
 repository-owned. The SDF CLI executes that local loop; it does not silently
 overwrite repository customisation during a later package upgrade.
 
+## Portable baseline, repository-owned extensions
+
+SDF 0.1.0 is the portable baseline for the governed-change loop. This base
+Developer Preview supplies the common governed-change contract and executable
+loop for repository guidance, configured verification, retained evidence, and
+human reviewer handoff.
+
+It is intentionally generic enough for different technology stacks, monoliths
+and microservices, repository sizes, product shapes, delivery processes, levels
+of AI adoption, and team experience or confidence with coding agents. The
+portable baseline does not attempt to supply every repository's engineering
+standards. Each receiver repository owns its `.sdf` configuration, verification
+boundary, repository-owned playbooks, and evidence expectations, extending the
+baseline with the checks, risks, and guidance appropriate to its stack,
+architecture, product, team, and delivery workflow. This team-specific
+adaptation is expected product behaviour, not a workaround or a gap.
+
+Receiver-specific implementations may also extend the baseline with, for
+example, model, token, and cost accounting; retained evidence used as working
+memory for future changes; recurring analysis of evidence to identify repeated
+friction or engineering hotspots; human-reviewed learning and improvement
+loops; or team- and application-specific evidence fields and policies. These
+are examples of receiver-specific adaptation, not capabilities automatically
+enabled or guaranteed by the base distribution in SDF 0.1.0. SDF does not
+autonomously rewrite its own standards or approve changes.
+
 ## Reviewer evidence
 
 Each governed change has `.sdf/evidence/<change-id>/evidence.md`. It gives a
@@ -164,11 +183,11 @@ them; SDF does not invent those claims.
 
 - [Getting started](GETTING-STARTED.md)
 - [Governed change playbook](.sdf/playbooks/governed-change-loop.md)
+- [Repository-owned playbook examples](docs/playbooks/README.md)
 - [Apache-2.0 licence](LICENSE)
 - [Software Dark Factory website](https://www.softwaredarkfactory.com/)
 - [Repository](https://github.com/johnnybutler7/sdf-cli)
 
 ## Contributing
 
-SDF is entering Developer Preview. Once the repository is public, issue reports
-and evaluation feedback will be welcome.
+SDF is in Developer Preview. Issue reports and evaluation feedback are welcome.
