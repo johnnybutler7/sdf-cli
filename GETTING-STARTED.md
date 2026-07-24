@@ -5,6 +5,11 @@ GitHub account. The example demonstrates the boundary that matters: the
 repository owns the standards and checks; SDF executes that acceptance boundary
 and records evidence for human review.
 
+You can follow this guide manually, or point your coding agent at it and ask
+it to install and configure SDF for your repository. The commands are the same
+either way. Review all proposed repository changes—especially
+`.sdf/verification.yml`—before committing them.
+
 ## Prerequisites
 
 - Python 3.11 through 3.14.
@@ -14,13 +19,14 @@ and records evidence for human review.
 
 ## Install SDF
 
-After the public 0.1.0 release is available on PyPI, install it with:
+Install the published package with:
 
 ```shell
 pipx install software-dark-factory
 ```
 
-That package is not published to PyPI yet. From a local source checkout, run:
+If you are contributing to SDF itself from a local source checkout, use an
+editable installation instead:
 
 ```shell
 pipx install --editable .
@@ -39,8 +45,8 @@ python -m pip install --upgrade pip
 python -m pip install software-dark-factory
 ```
 
-For a local source checkout, use `python -m pip install --editable .` instead
-of the final command.
+When contributing from a local source checkout, use
+`python -m pip install --editable .` instead of the final command.
 
 Confirm the command and the implementation you are running:
 
@@ -155,6 +161,17 @@ The evidence is at `.sdf/evidence/add-greeting/evidence.md`. The refreshed
 local handoff is under `.sdf/handoffs/add-greeting/`. Read both before opening
 any manually reviewed pull request. SDF does not create, approve, merge, or
 deploy that pull request.
+
+After this walkthrough, you should have:
+
+- an installed Front Door and `.sdf` area;
+- a repository-owned verification configuration;
+- recorded verification history;
+- structured evidence; and
+- a reviewer handoff for human review.
+
+These records support review; they do not prove correctness or authorise a
+merge.
 
 ## Remove the example safely
 

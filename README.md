@@ -69,6 +69,17 @@ merge changes, repair code, deploy software, or supply universal engineering
 standards. The repository and its reviewers remain responsible for those
 decisions.
 
+## Try SDF with a coding agent
+
+Point your coding agent at the [Getting Started guide](GETTING-STARTED.md) and
+ask it to install and configure Software Dark Factory for the repository. Ask
+it to use the documented commands, build `.sdf/verification.yml` from checks
+the repository already trusts, and show the full diff before anything is
+committed.
+
+You can follow the same steps manually. In either case, review the installed
+Front Door, configuration, and verification boundary before committing them.
+
 ## Installation
 
 `software-dark-factory` version 0.1.0 is published on PyPI. The normal
@@ -77,6 +88,9 @@ installation route is:
 ```shell
 pipx install software-dark-factory
 ```
+
+For a complete first installation and local walkthrough, see
+[Getting started](GETTING-STARTED.md).
 
 The PyPI distribution is **`software-dark-factory`**. Do not infer a PyPI
 package name from this repository or the `sdf` executable: `sdf-cli` and `sdf`
