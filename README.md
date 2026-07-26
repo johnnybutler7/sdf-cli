@@ -306,7 +306,9 @@ for the system model, lifecycle, trust boundaries, and Developer Preview limits.
 - A canonical [evidence record](src/sdf_cli/evidence_contract.py) with atomic
   updates and human-narrative preservation.
 - [GitHub publication workflows](.github/workflows/publish-open-pr-body.yml)
-  that avoid PR-head execution and guard PR-body mutation; see the
+  execute only trusted default-branch code, never PR-head code, so an untrusted
+  pull request cannot run arbitrary code with repository credentials. They also
+  guard PR-body mutation; see the
   [hostile-input regression test](tests/test_publish_open_pr_body_workflow.py).
 - A [release pipeline](.github/workflows/release.yml) that functionally verifies
   the exact wheel and source distribution before Trusted Publishing.
