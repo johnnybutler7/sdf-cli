@@ -71,21 +71,21 @@ decisions.
 
 ## Try SDF with a coding agent
 
-> **Developer Preview:** Install SDF on a dedicated branch or isolated worktree
-> in the intended receiver repository. Start from a clean worktree, keep
-> unrelated work out of the installation, and review every proposed change.
+> **Developer Preview:** The agent-led journey creates an isolated `sdf-demo`
+> baseline from the receiver's default branch, then prepares the installation
+> on a separate branch. It leaves the configured default branch unchanged.
 
 Point your coding agent at the [Getting Started guide](GETTING-STARTED.md) and
 ask it to install and configure Software Dark Factory in the repository
 currently open in its workspace. The intended journey is:
 
 > Point your agent at the guide → receive a verified, reviewable SDF
-> installation PR.
+> installation PR against an isolated evaluation baseline.
 
 The guide provides one copyable prompt and a bounded agent workflow that stops
-after opening a draft installation PR. For manual installation, mechanics
-inspection, troubleshooting, or environments without a coding agent, use the
-[manual walkthrough](docs/MANUAL-WALKTHROUGH.md).
+after opening a draft installation PR against `sdf-demo`. For manual
+installation, mechanics inspection, troubleshooting, or environments without a
+coding agent, use the [manual walkthrough](docs/MANUAL-WALKTHROUGH.md).
 
 ## Installation
 

@@ -5,7 +5,10 @@ repository. Use it if you prefer manual installation, maintain SDF, are
 troubleshooting, or do not have a repository-capable coding agent.
 
 For the normal agent-led installation journey in an established repository,
-use [Getting started](../GETTING-STARTED.md).
+use [Getting started](../GETTING-STARTED.md). That Developer Preview route
+defaults to an isolated `sdf-demo` evaluation baseline and an installation PR
+against it. This manual disposable example deliberately uses its own branch
+shape; experienced users may choose appropriate branches for manual work.
 
 The example demonstrates the core boundary: the repository owns its standards
 and checks; SDF executes that acceptance boundary and records evidence for
