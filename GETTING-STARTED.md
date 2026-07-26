@@ -138,7 +138,7 @@ Follow these steps in order.
    pipx install --python python3.11 software-dark-factory==0.1.0
    ```
 
-   Replace `python3.11` with the supported interpreter selected in step 4.
+   Replace `python3.11` with the supported interpreter selected in step 5.
    If `pipx` is unavailable but PyPI is reachable, use an isolated virtual
    environment and install the same pinned distribution:
 
