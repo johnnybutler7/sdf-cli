@@ -71,38 +71,33 @@ decisions.
 
 ## Try SDF with a coding agent
 
-> **Developer Preview:** Try SDF first in a disposable or example repository,
-> disposable clone, or dedicated evaluation branch—preferably in a separate
-> Git worktree. Start from a clean worktree, keep unrelated work out of the
-> evaluation, and review every proposed change before committing or pushing it.
+> **Developer Preview:** Install SDF on a dedicated branch or isolated worktree
+> in the intended receiver repository. Start from a clean worktree, keep
+> unrelated work out of the installation, and review every proposed change.
 
 Point your coding agent at the [Getting Started guide](GETTING-STARTED.md) and
-ask it to install and configure Software Dark Factory for the repository. For
-example:
+ask it to install and configure Software Dark Factory in the repository
+currently open in its workspace. The intended journey is:
 
-> Read the Getting Started guide and help me evaluate Software Dark Factory in
-> this repository. First confirm the current worktree is clean. Do not modify
-> the default branch. Create a dedicated evaluation branch, preferably in a
-> separate Git worktree. Use only the documented SDF commands, build
-> `.sdf/verification.yml` from checks this repository already trusts, and show
-> me the complete diff. Do not commit, push, or open a pull request until I
-> approve the proposed changes.
+> Point your agent at the guide → receive a verified, reviewable SDF
+> installation PR.
 
-You can follow the same steps manually. In either case, review the installed
-Front Door, configuration, verification boundary, and complete diff before
-deciding whether to commit, push, or open a pull request.
+The guide provides one copyable prompt and a bounded agent workflow that stops
+after opening a draft installation PR. For manual installation, mechanics
+inspection, troubleshooting, or environments without a coding agent, use the
+[manual walkthrough](docs/MANUAL-WALKTHROUGH.md).
 
 ## Installation
 
-`software-dark-factory` version 0.1.0 is published on PyPI. The normal
-installation route is:
+`software-dark-factory` version 0.1.0 is published on PyPI. The agent-led
+[Getting Started guide](GETTING-STARTED.md) covers installation,
+repository-owned configuration, verification, and the draft PR handoff.
+
+The published package can be installed with:
 
 ```shell
-pipx install software-dark-factory
+pipx install software-dark-factory==0.1.0
 ```
-
-For a complete first installation and local walkthrough, see
-[Getting started](GETTING-STARTED.md).
 
 The PyPI distribution is **`software-dark-factory`**. Do not infer a PyPI
 package name from this repository or the `sdf` executable: `sdf-cli` and `sdf`
@@ -114,16 +109,18 @@ If you prefer a virtual environment, install the published distribution with:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install software-dark-factory
+python -m pip install software-dark-factory==0.1.0
 ```
 
 Editable installation is for contributors or local source development. Use
 `pipx install --editable .` or replace the final virtual-environment command
 with `python -m pip install --editable .`.
 
-## First use
+## Initialisation commands
 
-From the root of the repository you want to govern:
+The coding agent normally performs and verifies these commands through the
+[Getting Started guide](GETTING-STARTED.md). For manual evaluation, see the
+[manual walkthrough](docs/MANUAL-WALKTHROUGH.md).
 
 ```shell
 sdf init
@@ -138,24 +135,9 @@ sdf guidance
 starter `.sdf/verification.yml` is an intentional placeholder: define the
 checks your repository trusts before running `sdf verify`.
 
-For the smallest governed change, start an archive, make the change, complete
-its reviewer judgement, and close it:
-
-```shell
-sdf start --change-id add-example
-# Make the ordinary repository change and complete the four sections in
-# .sdf/evidence/add-example/evidence.md.
-sdf close --change-id add-example
-```
-
-`sdf close` runs the repository-defined checks and records their result. After
-committing the change and evidence, refresh the checked local reviewer handoff:
-
-```shell
-sdf close --change-id add-example --refresh-handoff
-```
-
-See [GETTING-STARTED.md](GETTING-STARTED.md) for a complete, local example.
+Installation should be reviewed and merged before beginning a separate
+governed application change. The [manual walkthrough](docs/MANUAL-WALKTHROUGH.md)
+demonstrates that later workflow in a disposable example.
 
 ## The governed workflow
 
@@ -225,6 +207,7 @@ them; SDF does not invent those claims.
 ## Learn more
 
 - [Getting started](GETTING-STARTED.md)
+- [Manual walkthrough](docs/MANUAL-WALKTHROUGH.md)
 - [Governed change playbook](.sdf/playbooks/governed-change-loop.md)
 - [Repository-owned playbook examples](docs/playbooks/README.md)
 - [Apache-2.0 licence](LICENSE)

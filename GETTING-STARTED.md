@@ -1,200 +1,250 @@
-# Getting started with Software Dark Factory
+# Get SDF installed by your coding agent
 
-This guide walks through a first evaluation in a small local example. It needs
-no external service or GitHub account. The example demonstrates the boundary
-that matters: the repository owns the standards and checks; SDF executes that
-acceptance boundary and records evidence for human review.
+Software Dark Factory (SDF) is intended to be installed and configured by a
+repository-capable coding agent. Point the agent already working in your
+repository at this guide and receive a verified, reviewable SDF installation
+pull request.
 
-For a first evaluation, use a disposable repository or clone, or a dedicated
-evaluation branch—preferably in a separate Git worktree. Begin from a clean Git
-state, keep unrelated work out of the evaluation, and do not run it directly
-on the repository's default branch. Review all proposed changes, especially
-`.sdf/verification.yml`, before deciding whether to commit or push.
+The journey is:
 
-You can follow this guide manually, or point your coding agent at it and ask
-it to install and configure SDF for your repository. The commands are the same
-either way.
+> Point your agent at this guide → receive a verified, reviewable SDF
+> installation PR.
 
-## Prerequisites
+## Give this prompt to your coding agent
 
-- Python 3.11 through 3.14.
-- `pipx` for the primary installation route, or Python's built-in virtual
-  environment support.
-- Git, for the example repository and its final local commit.
+Copy and send this prompt from the repository where you want SDF installed:
 
-## Install SDF
+> Read `GETTING-STARTED.md` and install Software Dark Factory in the repository
+> currently open in your workspace. Follow the guide's authority boundary and
+> installation workflow. Work on a dedicated branch or isolated worktree,
+> configure verification from checks this repository already trusts, verify
+> the installation, commit only the installation-related changes, and open a
+> draft pull request when GitHub access is available. Stop after opening the
+> draft pull request and return control to me.
 
-Install the published package with:
+The rest of this guide is for the coding agent. The current repository is the
+installation target. Do not create a separate `sdf-example` repository.
 
-```shell
-pipx install software-dark-factory
-```
+## Outcome
 
-If you are contributing to SDF itself from a local source checkout, use an
-editable installation instead:
+Install SDF's Front Door in the current repository, adapt it to that
+repository's existing standards, run the configured verification, and hand the
+human a draft installation PR. Stop after opening the draft PR. If GitHub
+access is unavailable, stop after preparing the verified local branch and
+report the publication blocker.
 
-```shell
-pipx install --editable .
-```
+This guide installs SDF only. It does not implement the repository's first
+governed application change.
 
-The PyPI distribution is **`software-dark-factory`**. Do not infer a PyPI
-package name from this repository or the `sdf` executable: `sdf-cli` and `sdf`
-are not this project's distribution names.
+## Authority boundary
 
-With a virtual environment, use the intended post-release installation route:
+You may:
 
-```shell
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install software-dark-factory
-```
+- inspect the repository and its Git state;
+- create a dedicated branch or isolated worktree;
+- inspect existing languages, package tooling, tests, CI, playbooks, and
+  engineering guidance;
+- install the released SDF CLI;
+- run `sdf init`;
+- adapt `.sdf/verification.yml` to checks the repository already trusts;
+- run verification;
+- commit only SDF installation and configuration changes; and
+- push the branch and open a draft pull request when GitHub access is
+  available.
 
-When contributing from a local source checkout, use
-`python -m pip install --editable .` instead of the final command.
+You must not:
 
-Confirm the command and the implementation you are running:
+- work directly on the default branch;
+- change unrelated application behaviour;
+- repair unrelated pre-existing failures unless the human explicitly asks;
+- weaken trusted required checks merely to obtain a passing result;
+- approve or merge a pull request;
+- mark a draft pull request ready for review;
+- deploy or release anything; or
+- claim that SDF proves correctness.
 
-```shell
-sdf --help
-sdf --version
-sdf --identity
-```
+Pull-request review, approval, merge, and release authority remain with humans.
 
-## Create a clean receiver repository
+## Installation workflow
 
-For the simplest route, choose a temporary location, then initialise a Git
-repository, enter a dedicated evaluation branch, and install the Front Door:
+Follow these steps in order.
 
-```shell
-mkdir sdf-example
-cd sdf-example
-git init
-git switch -c try/sdf
-sdf init
-```
+1. Confirm the target and Git state.
 
-Inspect the receiver and the guidance available to it:
+   Treat the repository currently open in your workspace as the installation
+   target. Confirm its root, current branch, default branch, remotes, and
+   working-tree status. Preserve unrelated changes and stop for human direction
+   if they prevent a clean installation-only commit.
 
-```shell
-sdf status
-sdf guidance
-```
+2. Isolate the work.
 
-`sdf init` may create `.sdf/` (including portable guidance, contracts,
-`config.yml`, and starter `verification.yml`) plus root `AGENTS.md` and
-`CLAUDE.md` entries. It does not silently replace existing files; when managed
-`.gitignore` or `.gitattributes` entries are missing, it may append them. These
-are the installed Front Door, not your team's standards. Your repository owns
-its configuration, additional playbooks, verification commands, and every
-evidence archive.
+   Create a dedicated installation branch or an isolated worktree. Do not make
+   installation changes on the default branch.
 
-The starter verification file intentionally fails until you replace it with
-checks your repository trusts. For this example, create a tiny test and use
-the following `.sdf/verification.yml`:
+3. Inspect repository-owned standards.
 
-```yaml
-version: 1
-commands:
-  - name: unit-tests
-    command: python3 -m unittest discover -s tests
-```
+   Identify the repository's languages, supported runtimes, package tooling,
+   test commands, formatting and static-analysis checks, CI workflows, agent
+   instructions, and engineering playbooks. Prefer commands already used by
+   maintainers or required by CI.
 
-Create `tests/test_greeting.py` with this minimal test:
+4. Select Python.
 
-```python
-import unittest
+   SDF 0.1.0 supports Python 3.11 through 3.14. Choose a supported interpreter
+   that is already available and compatible with the repository's tooling.
+   Record the exact Python version used.
 
+5. Install the released package.
 
-class GreetingTest(unittest.TestCase):
-    def test_message(self):
-        self.assertEqual("hello", "hello")
-```
+   PyPI was independently verified as publishing
+   `software-dark-factory` 0.1.0. Prefer an isolated `pipx` installation:
 
-Now inspect and run the repository-defined boundary:
+   ```shell
+   pipx install --python python3.11 software-dark-factory==0.1.0
+   ```
 
-```shell
-sdf verify --check
-sdf verify
-```
+   Replace `python3.11` with the supported interpreter selected in step 4.
+   If `pipx` is unavailable but PyPI is reachable, use an isolated virtual
+   environment and install the same pinned distribution:
 
-`--check` is read-only. `sdf verify` runs only the commands the receiver has
-configured; it does not create evidence, approve a change, or contact GitHub.
+   ```shell
+   python3.11 -m venv .venv-sdf
+   .venv-sdf/bin/python -m pip install --upgrade pip
+   .venv-sdf/bin/python -m pip install software-dark-factory==0.1.0
+   ```
 
-At this point, inspect the full diff from `sdf init` and the verification
-configuration before continuing. The intended evaluation order is: work in the
-isolated branch or worktree, install and initialise SDF, inspect the resulting
-diff, adapt and review `.sdf/verification.yml`, then run a small governed
-change. Review its evidence and handoff before deciding whether to commit,
-push, or open an evaluation pull request.
+   Use the environment's `sdf` executable for the remaining steps and do not
+   commit the environment. If the documented PyPI routes fail, stop and report
+   the failure. Do not improvise an installation from an arbitrary branch,
+   unpinned `main`, or another undocumented source.
+
+6. Confirm the running implementation.
+
+   Run:
+
+   ```shell
+   sdf --help
+   sdf --version
+   sdf --identity
+   ```
+
+   Confirm that the identity and version match the intended released
+   installation. If using the virtual-environment route, invoke
+   `.venv-sdf/bin/sdf` instead.
+
+7. Install the Front Door.
+
+   From the target repository root, run:
+
+   ```shell
+   sdf init
+   ```
+
+8. Review every generated or modified file.
+
+   Inspect the complete diff. `sdf init` may create `.sdf/`, add root
+   `AGENTS.md` and `CLAUDE.md` entries, and append managed `.gitignore` or
+   `.gitattributes` entries. It does not make those files correct for this
+   repository without review.
+
+9. Replace the starter verification command.
+
+   The generated `.sdf/verification.yml` intentionally contains a failing
+   placeholder. Replace it with exact checks the repository already trusts.
+   Do not invent new acceptance standards as part of installation.
+
+10. Classify verification honestly.
+
+    Required checks are blocking and default to `required: true`. Use
+    `required: false` only for useful reviewer-visible feedback that the
+    repository genuinely treats as non-blocking. Do not downgrade a trusted
+    required check to make the installation pass.
+
+11. Preserve pre-existing failures.
+
+    Run or inspect the selected checks closely enough to distinguish
+    installation regressions from pre-existing failures. Do not silently hide,
+    repair, or relabel unrelated failures. Record them as limitations and ask
+    the human for direction if a required failure blocks closeout.
+
+12. Inspect and verify the installation.
+
+    Run:
+
+    ```shell
+    sdf status
+    sdf guidance
+    sdf verify --check
+    sdf verify
+    ```
+
+    `sdf verify --check` is read-only. `sdf verify` runs only the
+    repository-configured commands. Passing verification supports review; it
+    does not prove correctness.
+
+13. Record governed setup evidence when appropriate.
+
+    If the installed Front Door declares governance required for committed or
+    pull-request work, follow its governed-change loop and record this
+    installation as a setup change. Keep installation evidence separate from
+    any future application change.
+
+14. Commit only the installation.
+
+    Review the final diff and stage only the SDF Front Door, repository-owned
+    verification configuration, installation evidence, and directly related
+    documentation or ignore entries. Do not include unrelated work.
+
+15. Open a draft installation pull request.
+
+    Push the dedicated branch and open a draft PR when GitHub access is
+    available. The PR must explain the installed Front Door, repository-owned
+    checks, verification results, limitations, and points for human review. Do
+    not approve it, merge it, or mark it ready for review.
+
+16. Stop and return control to the human.
+
+    Do not begin an application change, deployment, release, or any follow-up
+    mutation.
+
+## Final response
+
+Report:
+
+- branch used;
+- SDF version;
+- installation source;
+- Python version used;
+- generated or modified files;
+- configured blocking verification checks;
+- optional or non-blocking checks;
+- verification results;
+- pre-existing failures or other limitations;
+- draft PR link, if created; and
+- items requiring human review.
+
+Do not tell the human to begin the first governed application change
+immediately, suggest approval or merge, or claim that SDF is fully adopted
+before review. If an installation fallback was used, add a clearly labelled
+**Installation note** and describe it neutrally.
+
+## After the installation PR
+
+This guide installs SDF's Front Door. The installation should be reviewed and
+merged before it is treated as the repository's active baseline. A first
+governed application change is a separate follow-up task. After installation,
+the human may ask:
+
+> Using this repository's installed SDF Front Door, implement `<specific
+> change>` as a governed change and open a draft pull request for review.
+
+For manual installation, mechanics inspection, troubleshooting, or an
+environment without a coding agent, use the optional
+[manual walkthrough](docs/MANUAL-WALKTHROUGH.md).
 
 ## Current support boundary
 
-This Developer Preview is tested on Linux and macOS-style POSIX environments;
-Windows is not currently tested or claimed. Hosted CI covers Python 3.11–3.14,
-plus wheel and source-distribution packaging smokes on Python 3.11.
-
-## Start and close a small governed change
-
-Start an evidence archive before making a small ordinary change:
-
-```shell
-sdf start --change-id add-greeting
-```
-
-Add your change, such as `greeting.py`, and update the test so it exercises the
-new behaviour. Then edit `.sdf/evidence/add-greeting/evidence.md` and fill in
-the four human sections:
-
-- Intent
-- Review focus
-- Limits
-- Guidance applied
-
-Close the change:
-
-```shell
-sdf close --change-id add-greeting
-```
-
-Closeout runs the full repository-defined verification boundary, records the
-result in the evidence machine record, and prepares a checked local handoff.
-If verification or the four evidence sections are incomplete, correct them and
-run the same `sdf close` command again.
-
-After reviewing the work locally, decide whether to keep the evaluation. Only
-then commit the change and its evidence:
-
-```shell
-git add greeting.py tests/test_greeting.py .sdf
-git commit -m "Add greeting example"
-sdf close --change-id add-greeting --refresh-handoff
-```
-
-The evidence is at `.sdf/evidence/add-greeting/evidence.md`. The refreshed
-local handoff is under `.sdf/handoffs/add-greeting/`. Read both before opening
-any manually reviewed pull request. SDF does not create, approve, merge, or
-deploy that pull request.
-
-After this walkthrough, you should have:
-
-- an installed Front Door and `.sdf` area;
-- a repository-owned verification configuration;
-- recorded verification history;
-- structured evidence; and
-- a reviewer handoff for human review.
-
-These records support review; they do not prove correctness or authorise a
-merge.
-
-## Remove the example safely
-
-Leave the example directory, confirm that you are in its parent and that the
-directory name is exactly `sdf-example`, then remove it using your operating
-system's Trash or file manager. Do not run a recursive deletion command until
-you have checked the path. A disposable clone can be removed using your
-operating system's Trash or file manager after confirming its location. Remove
-a linked worktree through your normal Git worktree cleanup process. Changes on
-a dedicated branch can be discarded through your normal Git review and cleanup
-process. If you created a virtual environment only for this example, remove
-that environment separately after confirming its location.
+SDF 0.1.0 is a Developer Preview tested on Python 3.11 through 3.14 in Linux
+and macOS-style POSIX environments. Windows is not currently tested or
+claimed. SDF supplies a portable base; each receiver repository owns and
+adapts its standards, verification boundary, playbooks, and evidence.
