@@ -1,8 +1,8 @@
 # Repository Playbooks
 
-These are repository-owned standards for shaping work in `sdf-cli`. They
-complement the portable governed change loop under `.sdf/`; they do not replace
-it or grant approval to merge.
+These are `sdf-cli`'s repository-owned standards that SDF routes into the
+agent's work. They complement the portable governed change loop under `.sdf/`;
+they do not replace it or grant approval to merge.
 
 The public `sdf-cli` playbooks are working examples of repository-owned
 guidance used by this project itself. They are reference material, not universal

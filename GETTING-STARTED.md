@@ -313,6 +313,19 @@ adopted SDF into the repository's normal baseline, they may ask:
 > Using this repository's installed SDF Front Door, implement `<specific
 > change>` as a governed change and open a draft pull request for review.
 
+## Optional next step: add your standards
+
+After reviewing the installation, you can ask your agent to map the
+repository's existing engineering standards into SDF playbooks. See
+[Add your engineering standards to SDF](docs/ADD-YOUR-STANDARDS.md).
+
+This is a separate governed change. The installation agent must stop after the
+installation draft PR and must not begin standards mapping automatically.
+
+Optional next step after reviewing the installation: map the repository's
+existing engineering standards into SDF playbooks using
+`docs/ADD-YOUR-STANDARDS.md`.
+
 For manual installation, mechanics inspection, troubleshooting, or an
 environment without a coding agent, use the optional
 [manual walkthrough](docs/MANUAL-WALKTHROUGH.md).

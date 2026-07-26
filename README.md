@@ -87,6 +87,9 @@ after opening a draft installation PR against `sdf-demo`. For manual
 installation, mechanics inspection, troubleshooting, or environments without a
 coding agent, use the [manual walkthrough](docs/MANUAL-WALKTHROUGH.md).
 
+Already installed SDF? [Add your repository's engineering standards](docs/ADD-YOUR-STANDARDS.md)
+so agents can select and apply your team-specific guidance during governed work.
+
 ## Installation
 
 `software-dark-factory` version 0.1.0 is published on PyPI. The agent-led
