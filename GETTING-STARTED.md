@@ -14,13 +14,17 @@ The journey is:
 
 Copy and send this prompt from the repository where you want SDF installed:
 
-> Read `GETTING-STARTED.md` and install Software Dark Factory in the repository
-> currently open in your workspace. Follow the guide's authority boundary and
-> installation workflow. Work on a dedicated branch or isolated worktree,
-> configure verification from checks this repository already trusts, verify
-> the installation, commit only the installation-related changes, and open a
-> draft pull request when GitHub access is available. Stop after opening the
-> draft pull request and return control to me.
+> Install Software Dark Factory in the repository currently open in your
+> workspace by following:
+>
+> `https://github.com/johnnybutler7/sdf-cli/blob/main/GETTING-STARTED.md`
+>
+> Follow the guide's authority boundary and installation workflow. Work on a
+> dedicated branch or isolated worktree, configure verification from checks
+> this repository already trusts, verify the installation, commit only the
+> installation-related changes, and open a draft pull request when GitHub
+> access is available. Stop after opening the draft pull request and return
+> control to me.
 
 The rest of this guide is for the coding agent. The current repository is the
 installation target. Do not create a separate `sdf-example` repository.
