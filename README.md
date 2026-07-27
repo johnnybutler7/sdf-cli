@@ -23,6 +23,8 @@ checks, and evidence executable before human review.
 SDF exists to help teams benefit from agentic speed without lowering the
 engineering bar or taking approval and merge authority away from people.
 
+**Why the name?** SDF began with a lights-off ambition. Building towards it showed that greater autonomy first requires repository-owned standards, executable verification, retained evidence and clear human authority boundaries. [Read the origin and direction](https://www.softwaredarkfactory.com/founder-memo#why-the-name).
+
 ## The governed change loop
 
 - `sdf init` installs the repository Front Door.
